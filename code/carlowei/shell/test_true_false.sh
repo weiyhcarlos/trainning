@@ -53,8 +53,7 @@ fi            # 随便的一串字符为真.
 echo
 
 echo "Testing \"\$xyz\""
-if [ $xyz ]   # 判断$xyz是否为null, 但是...
-              # 这只是一个未初始化的变量.
+if [ $xyz ]   # 判断$xyz是否为null, 但是这只是一个未初始化的变量.
 then
   echo "Uninitialized variable is true."
 else
@@ -91,7 +90,7 @@ echo
 # 什么时候"false"为真?
 
 echo "Testing \"false\""
-if [ "false" ]              #  看起来"false"只不过是一个字符串而已.
+if [ "false" ]              #  "false"只不过是一个字符串.
 then
   echo "\"false\" is true." #+ 并且条件判断的结果为真.
 else
@@ -100,7 +99,7 @@ fi            # "false" 为真.
 
 echo
 
-echo "Testing \"\$false\""  # 再来一个, 未初始化的变量.
+echo "Testing \"\$false\""  # 未初始化的变量.
 if [ "$false" ]
 then
   echo "\"\$false\" is true."
