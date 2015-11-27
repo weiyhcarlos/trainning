@@ -6,7 +6,7 @@ class Collector:
     '''
     def __init__(self, collect_list):
         #TO-DO 线程池初始化
-        self.collect_list=collect_list
+        self.collect_list = collect_list
 
     def collect_cpu(self):
         #TO-DO
@@ -30,8 +30,9 @@ class Collector:
 
     def collect(self):
         result = dict()
+        print self.collect_list
         for part in self.collect_list:
             #TO-DO
-            result[part]='test'
+            result[part] = 'test'
             pass
         return result

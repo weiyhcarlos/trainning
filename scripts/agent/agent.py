@@ -2,10 +2,12 @@
 
 import argparse
 import ConfigParser
-import time
+import time, sys
 
 from collector import Collector
 from handler import Handler
+
+ALL_MODULE = ['cpu', 'mem', 'disk', 'net']
 
 def get_config(section):
     '''
@@ -21,10 +23,12 @@ def get_config(section):
         try:
             result[option] = config.get(section, option)
             if result[option] == -1:
-                DebugPrint("skip: %s" % option)
+                print "skip: %s" % option
+                sys.exit(1)
         except:
-            print("exception on %s!" % option)
+            print "exception on %s!" % option
             result[option] = None
+            sys.exit(1)
     return result
 
 def get_parser():
@@ -51,7 +55,8 @@ def get_parser():
             metavar="MODULE",
             help="use module MODULE",
             choices=['all', 'cpu', 'memory'],
-            nargs="+")
+            #nargs="+"
+            )
     parser.add_argument("-t", "--ttl",
             help="set agent period, default is 60s",
             default=60)
@@ -65,17 +70,17 @@ def main():
     parser = get_parser()
     args = parser.parse_args()
     if args.version:
-        print "agent: version 1.0"
+        print "version: ", get_config("Base")["version"]
     elif args.help:
         parser.print_help()
     elif args.ttl and args.module:
-        #print args.module,args.ttl
-        #print get_config("Database")
-        collector = Collector(args.module)
+        if args.module == 'all':
+            collector = Collector(ALL_MODULE)
+        else:
+            collector = Collector([args.module])
         handler = Handler(get_config("Database"))
         while True:
             result = collector.collect()
-            #print result
             handler.upload_mongodb(result)
             time.sleep(args.ttl)
 
