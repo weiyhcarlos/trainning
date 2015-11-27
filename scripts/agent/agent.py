@@ -40,7 +40,7 @@ def get_parser():
             add_help=False,
             prog='python agent.py',
             usage='%(prog)s [options]',
-            epilog="Modules:\n  all,cpu,memory\n"
+            epilog="Modules:\n  all,cpu,memory,disk,net\n"
             )
 
     group = parser.add_mutually_exclusive_group(required=True)
@@ -54,7 +54,7 @@ def get_parser():
     group.add_argument("-m", "--module",
             metavar="MODULE",
             help="use module MODULE",
-            choices=['all', 'cpu', 'memory'],
+            choices=['all', 'cpu', 'memory', 'disk', 'net'],
             #nargs="+"
             )
     parser.add_argument("-t", "--ttl",
