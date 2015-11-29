@@ -65,7 +65,9 @@ def main():
         handler = MachineInfoHandler(config.get_section("MongoDB"))
         parser = MachineInfoParser(modules, handler)
         while True:
+            start_time = time.time()
             parser.parse()
+            print("--- %s seconds ---" % (time.time() - start_time))
             time.sleep(args.ttl)
 
 if __name__ == '__main__':

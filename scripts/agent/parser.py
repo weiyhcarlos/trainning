@@ -21,4 +21,4 @@ class MachineInfoParser(Parser):
 
     def parse(self):
         for collector in self.collector:
-            self.handler.upload_database(collector.collect_info())
+            self.handler.upload(collector.collect_info())

@@ -10,11 +10,11 @@ class Handler(object):
         #TODO
         pass
 
-    def upload_database(self, data):
-        #TODO
-        pass 
-
-    def transmission(self, data):
+    def upload(self, data):
+        """
+        根据不同处理模块使用不同的方式上报
+        如：单机使用MongoDB
+        """
         #TODO
         pass
 
@@ -30,7 +30,7 @@ class MachineInfoHandler(Handler):
         print self.host, self.port, self.database, self.collection
 
 
-    def upload_database(self, data):
+    def upload(self, data):
         #TODO
         #testing
         print "upload to mongodb successfully.\n data: %s" % data
