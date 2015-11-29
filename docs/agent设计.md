@@ -74,7 +74,7 @@
 ## 四.接口
 ### 数据消息内容
 	{
-		'cluster':'XXX',
+		//'cluster':'XXX',
 		'ip':'1.1.1.1',
 		'mac':'00:00:00:00:00:00',
 		'hostname':'XXX',
@@ -91,7 +91,7 @@
 			'steal':0,
 			'guest':0,
 			'guest_nice':0,
-			//暂省略cpu信息,例如个数.
+			#暂省略cpu信息,例如个数.
 		},
 		'mem':
 		{
@@ -108,40 +108,47 @@
 		'disk':
 		{
 			'total':100,
-			'tfree':100,
-			'tread':100,
-			'twrite':100,
-			[
-				{
-					'name':'sda1',
-					'cap':1000,
-					'free':100,
-					'read':1,
-					'write':1,
-				},
-				{
-					'name':'sda2',
-					'cap':1000,
-					'free':100,
-					'read':1,
-					'write':1,
-				}
-			]
+			'free':100,
+            'used':100,
+			'read_count':100,
+			'write_count':100,
+            'read_bytes':100,
+            'write_bytes':100,
+            'read_time':100,
+            'write_time':100
+			#[
+			#	{
+			#		'name':'sda1',
+			#		'cap':1000,
+			#		'free':100,
+			#		'read':1,
+			#		'write':1,
+			#	},
+			#	{
+			#		'name':'sda2',
+			#		'cap':1000,
+			#		'free':100,
+			#		'read':1,
+			#		'write':1,
+			#	}
+			#]
 		},
 		'net':
 		{
-			[
-				{
-					'name':'eth0',
-					'write':100,
-					'read':100
-				},
-				{
-					'name':'eth1',
-					'write':100,
-					'read':100
-				},
-			]
+            'interface_name1': {
+                    'bytes_sent':100,
+                    'bytes_recv':100,
+                    'packets_sent':100,
+                    'packets_recv':100,
+                    'errin':100,
+                    'errout':100,
+                    'dropin':100,
+                    'dropout':100
+                    },
+            'interface_name2': {
+                    ...
+                    }
+            ...
 		}
 	}
 
