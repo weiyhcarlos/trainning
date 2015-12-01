@@ -76,7 +76,7 @@ agent开启时,首先同步服务器时间,达到一致.
 	system 内核态
 	idle 空闲
 	iowait 等待IO
-	irq 硬中断服务	
+	irq 硬中断服务
 	softirq 软中断服务
 	steal 虚拟化相关
 	guest 虚拟化相关
@@ -95,28 +95,29 @@ agent开启时,首先同步服务器时间,达到一致.
 	inactive 不活跃内存，很可能被挪用
 	swap_used 已使用 swap
 
-#### net	
-	信息:单位KB/s
+#### net
+	信息:
 	考虑多块网卡情形
 
 	指标 含义
-	read  网络读 
-	write 网络写
-
+    sent_rate 数据发送速率 KB/s
+    recv_rate 数据接收速率 KB/s
+    packets_sent_rate 包发送速率 个/s
+    packets_recv_rate 包接收速率 个/s
 
 #### disk
 	信息:
 	考虑多块磁盘情形
 
 	指标 含义
-	total 所有磁盘容量 GB
-	tfree  所有磁盘剩余 GB
-	tread  磁盘读 MB/s
-	twrite 磁盘写 MB/s
+    t_cap 所有磁盘容量 GB
+	t_free  所有磁盘剩余 GB
+	t_read_rate  磁盘读 MB/s
+	t_write_rate 磁盘写 MB/s
 	cap   单块磁盘容量 GB
 	free  单块磁盘剩余 GB
-	read  单块磁盘读 MB/s
-	write 单块磁盘写 MB/s
+	read_rate  单块磁盘读 MB/s
+	write_rate 单块磁盘写 MB/s
 
 
 ### 数据消息内容
@@ -139,7 +140,6 @@ agent开启时,首先同步服务器时间,达到一致.
 			'steal':0,
 			'guest':0,
 			'guest_nice':0,
-			//暂省略cpu信息,例如个数.
 		},
 		'mem':
 		{
@@ -155,42 +155,40 @@ agent开启时,首先同步服务器时间,达到一致.
 		},
 		'disk':
 		{
-			'total':100,
-			'tfree':100,
-			'tread':100,
-			'twrite':100,
-			[
-				{
-					'name':'sda1',
+			't_cap':100,
+			't_free':100,
+			't_read_rate':100,
+			't_write_rate':100,
+			'per_disk_info':[
+				'sda1':
+                {
 					'cap':1000,
 					'free':100,
-					'read':1,
-					'write':1,
+					'read_rate':1,
+					'write_rate':1,
 				},
-				{
-					'name':'sda2',
-					'cap':1000,
-					'free':100,
-					'read':1,
-					'write':1,
+				'sda2':
+                {
+                    ...
 				}
+                ...
 			]
 		},
 		'net':
-		{
-			[
-				{
-					'name':'eth0',
-					'write':100,
-					'read':100
-				},
-				{
-					'name':'eth1',
-					'write':100,
-					'read':100
-				},
-			]
-		}
+        {
+            'interface_name1':
+            {
+                'sent_rate':100,
+                'recv_rate':100,
+                'packets_sent_rate':100,
+                'packets_recv_rate':100,
+            },
+            'interface_name2':
+            {
+                ...
+            }
+            ...
+        }
 	}
 
 ### 数据消息格式
