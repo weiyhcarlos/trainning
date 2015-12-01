@@ -3,13 +3,15 @@
 """
 #from pymongo import MongoClient
 
+#def fail_store_local(func):
+#    print("before myfunc() called.")
+#    func()
+#    print("  after myfunc() called.")
+#    return func
+
 class Handler(object):
     """数据处理基类
     """
-    def __init__(self, config):
-        #TODO
-        pass
-
     def upload(self, data):
         """
         根据不同处理模块使用不同的方式上报
@@ -29,10 +31,16 @@ class MongoMachineInfoHandler(Handler):
         #testing
         print self.host, self.port, self.database, self.collection
 
+    def save_data(self, data):
+        """完成单次记录写入
+        """
+        #TODO
+        pass
 
     def upload(self, data):
+        """将收集得到的数据组装存储到MongoDB
+        """
         #TODO
         #testing
         print "upload to mongodb successfully.\n data: %s" % data
-        pass
 

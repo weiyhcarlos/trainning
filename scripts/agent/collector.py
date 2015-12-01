@@ -17,19 +17,29 @@ class Collector(object):
         self.interval = interval
 
     def callback(self, prefix, name, *args):
-        method = getattr(self,prefix+name,None)
-        if callable(method): return method(*args)
-
-    def set_interval(self, interval):
-        self.interval = interval
+        """存在prefix_name函数时进行调用
+        """
+        method = getattr(self, prefix+name, None)
+        if callable(method):
+            return method(*args)
 
     def set_modules(self, modules):
+        """更新模块
+        """
         self.modules = modules
 
+    def set_interval(self, interval):
+        """更新采集周期"""
+        self.interval = interval
+
     def collect(self, collect_part):
+        """收集相应模块的信息
+        """
         return self.callback('collect_', collect_part)
 
     def collect_base_info(self):
+        """收集机器基础信息
+        """
         return {
             "ip":socket.gethostbyname(socket.gethostname()),
             "hostname":socket.gethostname(),
@@ -38,6 +48,8 @@ class Collector(object):
             }
 
     def collect_info(self):
+        """收集所有模块信息
+        """
         result = self.collect_base_info()
         print self.modules
         for collect_part in self.modules:
@@ -53,6 +65,8 @@ class MachineInfoCollector(Collector):
         self.last_disk_info = None
 
     def collect_cpu(self):
+        """收集CPU模块信息
+        """
         cpu_info = psutil.cpu_times()
         target_info = {
             "user":cpu_info.user,
@@ -72,6 +86,8 @@ class MachineInfoCollector(Collector):
         return target_info
 
     def collect_average_load(self):
+        """收集平均负载信息
+        """
         w1_avg, w2_avg, w3_avg = os.getloadavg()
         return {
             "w1_avg":w1_avg,
@@ -80,6 +96,8 @@ class MachineInfoCollector(Collector):
                 }
 
     def collect_mem(self):
+        """收集内存信息
+        """
         virtual_mem_info = psutil.virtual_memory()
         swap_mem_info = psutil.swap_memory()
         target_info = {
@@ -100,6 +118,8 @@ class MachineInfoCollector(Collector):
 
 
     def collect_net(self):
+        """收集网络接口信息（返回每个网卡的信息）
+        """
         #TODO
         if self.last_net_info is not None:
             net_info = psutil.net_io_counters(pernic=True)
@@ -109,6 +129,8 @@ class MachineInfoCollector(Collector):
         return return_info
 
     def collect_disk(self):
+        """收集磁盘信息（返回总磁盘信息及每个磁盘信息）
+        """
         #TODO
         usage = []
         for part in psutil.disk_partitions(all=False):
