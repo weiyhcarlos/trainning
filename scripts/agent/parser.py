@@ -1,24 +1,25 @@
 # -*- coding: UTF-8 -*-
 
+import time
 from collector import MachineInfoCollector
 
 class Parser:
     '''
     使用handler处理collector收集的信息
     '''
-    def __init__(self, handler):
+    def __init__(self, collector, handler):
         self.handler = handler
-        self.collector = []
+        self.collector = collector
 
-    def add_collector(self, collector):
-        self.collector.append(collector)
+    def set_modules(self, modules):
+        self.collector.set_modules(modules)
 
-
-class MachineInfoParser(Parser):
-    def __init__(self, modules, handler):
-        Parser.__init__(self, handler)
-        self.add_collector(MachineInfoCollector(modules))
+    def set_interval(self, interval):
+        self.collector.set_interval(interval)
 
     def parse(self):
-        for collector in self.collector:
-            self.handler.upload(collector.collect_info())
+        while True:
+            start_time = time.time()
+            self.handler.upload(self.collector.collect_info())
+            print("--- %s seconds ---" % (time.time() - start_time))
+            time.sleep(self.collector.interval)

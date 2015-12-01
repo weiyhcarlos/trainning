@@ -5,8 +5,9 @@
 import argparse
 import time
 
-from handler import MachineInfoHandler
-from parser import MachineInfoParser
+from collector import MachineInfoCollector
+from handler import MongoMachineInfoHandler
+from parser import Parser
 from util import GetConfig
 
 CONFIG_PATH = "config.ini"
@@ -62,13 +63,10 @@ def main():
         else:
             modules = [args.module]
 
-        handler = MachineInfoHandler(config.get_section("MongoDB"))
-        parser = MachineInfoParser(modules, handler)
-        while True:
-            start_time = time.time()
-            parser.parse()
-            print("--- %s seconds ---" % (time.time() - start_time))
-            time.sleep(args.ttl)
+        handler = MongoMachineInfoHandler(config.get_section("MongoDB"))
+        collector = MachineInfoCollector(modules, args.ttl)
+        parser = Parser(collector, handler)
+        parser.parse()
 
 if __name__ == '__main__':
     main()

@@ -18,7 +18,7 @@ class Handler(object):
         #TODO
         pass
 
-class MachineInfoHandler(Handler):
+class MongoMachineInfoHandler(Handler):
     """机器信息数据处理模块
     """
     def __init__(self, config):
