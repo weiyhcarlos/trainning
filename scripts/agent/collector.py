@@ -62,7 +62,7 @@ class MachineInfoCollector(Collector):
     def __init__(self, modules, interval):
         Collector.__init__(self, modules, interval)
         self.last_net_info = None
-        self.last_disk_info = None
+        self.last_disk_io = None
 
     def collect_cpu(self):
         """收集CPU模块信息
@@ -82,7 +82,7 @@ class MachineInfoCollector(Collector):
             }
         sum_result = sum(target_info.values())
         for key, value in target_info.iteritems():
-            target_info[key] = "{0:.4f}".format(value/sum_result)
+            target_info[key] = value/sum_result
         return target_info
 
     def collect_average_load(self):
@@ -120,34 +120,85 @@ class MachineInfoCollector(Collector):
     def collect_net(self):
         """收集网络接口信息（返回每个网卡的信息）
         """
-        #TODO
-        if self.last_net_info is not None:
-            net_info = psutil.net_io_counters(pernic=True)
+        if self.last_net_info is None:
+            self.last_net_info = psutil.net_io_counters(pernic=True)
+            return {}
+
         return_info = dict()
-        for interface in net_info.keys():
-            return_info[interface] = dict(net_info[interface].__dict__)
+
+        current_net_info = psutil.net_io_counters(pernic=True)
+        for name in current_net_info.keys():
+            return_info[name] = {
+                "sent_rate":float(current_net_info[name].bytes_sent-
+                    self.last_net_info[name].bytes_sent)/(self.interval*1024),
+                "recv_rate":float(current_net_info[name].bytes_recv-
+                    self.last_net_info[name].bytes_recv)/(self.interval*1024),
+                "packets_sent_rate":float(current_net_info[name].packets_sent-
+                    self.last_net_info[name].packets_sent)/self.interval,
+                "packets_recv_rate":float(current_net_info[name].packets_recv-
+                    self.last_net_info[name].packets_recv)/self.interval
+                }
+
         return return_info
 
     def collect_disk(self):
         """收集磁盘信息（返回总磁盘信息及每个磁盘信息）
         """
-        #TODO
-        usage = []
+        usage = dict()
+
         for part in psutil.disk_partitions(all=False):
             #跳过没有磁盘的CD-ROM驱动
             if os.name == 'nt':
                 if 'cdrom' in part.opts or part.fstype == '':
                     continue
-            usage.append(psutil.disk_usage(part.mountpoint))
-        disk_io_info = psutil.disk_io_counters()
-        return {
-            "total":sum(u.total for u in usage),
-            "used":sum(u.used for u in usage),
-            "free":sum(u.free for u in usage),
-            "read_count":disk_io_info.read_count,
-            "write_count":disk_io_info.write_count,
-            "read_bytes":disk_io_info.read_bytes,
-            "write_bytes":disk_io_info.write_bytes,
-            "read_time":disk_io_info.read_time,
-            "write_time":disk_io_info.write_time
-            }
+            usage[part.device] = psutil.disk_usage(part.mountpoint)
+
+        return_info = {
+                "t_cap":float(sum(u.total for u in
+                    usage.values()))/(1024*1024*1024),
+                "t_used":float(sum(u.used for u in
+                    usage.values()))/(1024*1024*1024),
+                "t_free":float(sum(u.free for u in
+                    usage.values()))/(1024*1024*1024),
+                "t_read_rate":0.0,
+                "t_write_rate":0.0,
+                "per_disk_info":{}
+                }
+
+        for disk_name in usage.keys():
+            return_info["per_disk_info"][disk_name] = {
+                    "cap":float(usage[disk_name].total)/(1024*1024*1024),
+                    "used":float(usage[disk_name].used)/(1024*1024*1024),
+                    "free":float(usage[disk_name].free)/(1024*1024*1024),
+                    "write_rate":0.0,
+                    "read_rate":0.0
+                    }
+
+        if self.last_disk_io is None:
+            self.last_disk_io = psutil.disk_io_counters(perdisk=True)
+            return return_info
+
+        current_disk_io = psutil.disk_io_counters(perdisk=True)
+
+        for disk_name in current_disk_io.keys():
+            full_disk_name = "/dev/"+disk_name
+            print full_disk_name
+            if full_disk_name in usage.keys():
+                return_info["per_disk_info"][full_disk_name]["read_rate"] = float(
+                        current_disk_io[disk_name].read_bytes-
+                        self.last_disk_io[disk_name].read_bytes)/(
+                        self.interval*1024*1024)
+                return_info["per_disk_info"][full_disk_name]["write_rate"] = float(
+                        current_disk_io[disk_name].write_bytes-
+                        self.last_disk_io[disk_name].write_bytes)/(
+                        self.interval*1024*1024)
+
+
+        print return_info["per_disk_info"].values()
+
+        return_info["t_write_rate"] = sum(u["write_rate"] for u in
+                return_info["per_disk_info"].values())
+        return_info["t_read_rate"] = sum(u["read_rate"] for u in
+                return_info["per_disk_info"].values())
+
+        return return_info

@@ -39,7 +39,7 @@ def get_option_parser():
             )
     parser.add_argument("-t", "--ttl",
             help="set agent period, default is 60s",
-            default=60)
+            default=10)
 
     return parser
 
@@ -67,7 +67,11 @@ def main():
         handler = PrintMachineInfoHandler()
         collector = MachineInfoCollector(modules, args.ttl)
         parser = Parser(collector, handler)
-        parser.parse()
+        while True:
+            start_time = time.time()
+            parser.parse()
+            print "--- %s seconds ---" % (time.time() - start_time)
+            time.sleep(args.ttl)
 
 if __name__ == '__main__':
     main()

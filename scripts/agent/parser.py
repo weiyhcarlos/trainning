@@ -32,8 +32,5 @@ class Parser(object):
     def parse(self):
         """使用handler处理collector收集的信息
         """
-        while True:
-            start_time = time.time()
-            self.handler.handle_data(self.collector.collect_info())
-            print "--- %s seconds ---" % (time.time() - start_time)
-            time.sleep(self.collector.interval)
+        self.handler.handle_data(self.collector.collect_info())
+
