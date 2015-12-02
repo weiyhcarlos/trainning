@@ -3,7 +3,7 @@
 """
 from uuid import getnode as get_mac
 from datetime import datetime
-import os, socket
+import os, socket, json
 
 import psutil
 
@@ -43,18 +43,18 @@ class Collector(object):
         return {
             "ip":socket.gethostbyname(socket.gethostname()),
             "hostname":socket.gethostname(),
-            "mac":get_mac(),
-            "time":datetime.now()
+            "mac":':'.join(("%012X" % get_mac())[i:i+2]
+                for i in range(0, 12, 2)),
+            "time":str(datetime.now())
             }
 
     def collect_info(self):
         """收集所有模块信息
         """
         result = self.collect_base_info()
-        print self.modules
         for collect_part in self.modules:
             result[collect_part] = self.collect(collect_part)
-        return result
+        return json.dumps(result)
 
 class MachineInfoCollector(Collector):
     """机器监控信息收集模块

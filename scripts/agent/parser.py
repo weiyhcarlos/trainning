@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 
 import time
-from collector import MachineInfoCollector
 
 class Parser(object):
     """使用handler处理collector收集的信息
@@ -20,11 +19,21 @@ class Parser(object):
         """
         self.collector.set_interval(interval)
 
+    def set_handler(self, handler):
+        """更新handler
+        """
+        self.handler = handler
+
+    def set_collector(self, collector):
+        """更新collector
+        """
+        self.collector = collector
+
     def parse(self):
         """使用handler处理collector收集的信息
         """
         while True:
             start_time = time.time()
-            self.handler.upload(self.collector.collect_info())
+            self.handler.handle_data(self.collector.collect_info())
             print "--- %s seconds ---" % (time.time() - start_time)
             time.sleep(self.collector.interval)

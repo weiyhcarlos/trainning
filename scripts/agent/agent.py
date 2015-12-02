@@ -6,7 +6,7 @@ import argparse
 import time
 
 from collector import MachineInfoCollector
-from handler import MongoMachineInfoHandler
+from handler import MongoMachineInfoHandler, PrintMachineInfoHandler
 from parser import Parser
 from util import GetConfig
 
@@ -63,7 +63,8 @@ def main():
         else:
             modules = [args.module]
 
-        handler = MongoMachineInfoHandler(config.get_section("MongoDB"))
+        #handler = MongoMachineInfoHandler(config.get_section("MongoDB"))
+        handler = PrintMachineInfoHandler()
         collector = MachineInfoCollector(modules, args.ttl)
         parser = Parser(collector, handler)
         parser.parse()
