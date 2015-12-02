@@ -111,10 +111,12 @@ agent开启时,首先同步服务器时间,达到一致.
 
 	指标 含义
     t_cap 所有磁盘容量 GB
+    t_used 所有磁盘使用 GB
 	t_free  所有磁盘剩余 GB
 	t_read_rate  磁盘读 MB/s
 	t_write_rate 磁盘写 MB/s
 	cap   单块磁盘容量 GB
+    used  单块磁盘使用 GB
 	free  单块磁盘剩余 GB
 	read_rate  单块磁盘读 MB/s
 	write_rate 单块磁盘写 MB/s
@@ -156,18 +158,19 @@ agent开启时,首先同步服务器时间,达到一致.
 		'disk':
 		{
 			't_cap':100,
+            't_used':100,
 			't_free':100,
 			't_read_rate':100,
 			't_write_rate':100,
 			'per_disk_info':[
-				'sda1':
                 {
+                    'disk_name':'sda1',
 					'cap':1000,
+                    'used':100,
 					'free':100,
 					'read_rate':1,
 					'write_rate':1,
 				},
-				'sda2':
                 {
                     ...
 				}
@@ -176,19 +179,19 @@ agent开启时,首先同步服务器时间,达到一致.
 		},
 		'net':
         {
-            'interface_name1':
-            {
-                'sent_rate':100,
-                'recv_rate':100,
-                'packets_sent_rate':100,
-                'packets_recv_rate':100,
-            },
-            'interface_name2':
-            {
+            'per_net_info':[
+                {
+                    'net_name':'eth0',
+                    'sent_rate':100,
+                    'recv_rate':100,
+                    'packets_sent_rate':100,
+                    'packets_recv_rate':100,
+                },
+                {
+                    ...
+                }
                 ...
-            }
-            ...
-        }
+            ]
 	}
 
 ### 数据消息格式

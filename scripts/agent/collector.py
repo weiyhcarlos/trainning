@@ -3,6 +3,7 @@
 """
 from uuid import getnode as get_mac
 from datetime import datetime
+from bson import json_util
 import os, socket, json
 
 import psutil
@@ -29,7 +30,8 @@ class Collector(object):
         self.modules = modules
 
     def set_interval(self, interval):
-        """更新采集周期"""
+        """更新采集周期
+        """
         self.interval = interval
 
     def collect(self, collect_part):
@@ -45,7 +47,7 @@ class Collector(object):
             "hostname":socket.gethostname(),
             "mac":':'.join(("%012X" % get_mac())[i:i+2]
                 for i in range(0, 12, 2)),
-            "time":str(datetime.now())
+            "time":datetime.now()
             }
 
     def collect_info(self):
@@ -54,7 +56,7 @@ class Collector(object):
         result = self.collect_base_info()
         for collect_part in self.modules:
             result[collect_part] = self.collect(collect_part)
-        return json.dumps(result)
+        return json.dumps(result, default=json_util.default)
 
 class MachineInfoCollector(Collector):
     """机器监控信息收集模块
@@ -124,11 +126,12 @@ class MachineInfoCollector(Collector):
             self.last_net_info = psutil.net_io_counters(pernic=True)
             return {}
 
-        return_info = dict()
+        return_info = {"per_net_info":[]}
 
         current_net_info = psutil.net_io_counters(pernic=True)
         for name in current_net_info.keys():
-            return_info[name] = {
+            return_info["per_net_info"].append({
+                "net_name":name,
                 "sent_rate":float(current_net_info[name].bytes_sent-
                     self.last_net_info[name].bytes_sent)/(self.interval*1024),
                 "recv_rate":float(current_net_info[name].bytes_recv-
@@ -137,7 +140,7 @@ class MachineInfoCollector(Collector):
                     self.last_net_info[name].packets_sent)/self.interval,
                 "packets_recv_rate":float(current_net_info[name].packets_recv-
                     self.last_net_info[name].packets_recv)/self.interval
-                }
+                })
 
         return return_info
 
@@ -162,17 +165,18 @@ class MachineInfoCollector(Collector):
                     usage.values()))/(1024*1024*1024),
                 "t_read_rate":0.0,
                 "t_write_rate":0.0,
-                "per_disk_info":{}
+                "per_disk_info":[]
                 }
 
         for disk_name in usage.keys():
-            return_info["per_disk_info"][disk_name] = {
+            return_info["per_disk_info"].append({
+                    "disk_name":disk_name,
                     "cap":float(usage[disk_name].total)/(1024*1024*1024),
                     "used":float(usage[disk_name].used)/(1024*1024*1024),
                     "free":float(usage[disk_name].free)/(1024*1024*1024),
                     "write_rate":0.0,
                     "read_rate":0.0
-                    }
+                    })
 
         if self.last_disk_io is None:
             self.last_disk_io = psutil.disk_io_counters(perdisk=True)
@@ -184,21 +188,23 @@ class MachineInfoCollector(Collector):
             full_disk_name = "/dev/"+disk_name
             print full_disk_name
             if full_disk_name in usage.keys():
-                return_info["per_disk_info"][full_disk_name]["read_rate"] = float(
+                for single_disk in return_info["per_disk_info"]:
+                    if single_disk['disk_name'] == full_disk_name:
+                        target_disk_info = single_disk
+                        break
+                target_disk_info["read_rate"] = float(
                         current_disk_io[disk_name].read_bytes-
                         self.last_disk_io[disk_name].read_bytes)/(
                         self.interval*1024*1024)
-                return_info["per_disk_info"][full_disk_name]["write_rate"] = float(
+                target_disk_info["write_rate"] = float(
                         current_disk_io[disk_name].write_bytes-
                         self.last_disk_io[disk_name].write_bytes)/(
                         self.interval*1024*1024)
 
 
-        print return_info["per_disk_info"].values()
-
         return_info["t_write_rate"] = sum(u["write_rate"] for u in
-                return_info["per_disk_info"].values())
+                return_info["per_disk_info"])
         return_info["t_read_rate"] = sum(u["read_rate"] for u in
-                return_info["per_disk_info"].values())
+                return_info["per_disk_info"])
 
         return return_info
