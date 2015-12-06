@@ -63,13 +63,17 @@ def main():
         else:
             modules = [args.module]
 
-        #handler = MongoMachineInfoHandler(config.get_section("MongoDB"))
-        handler = PrintMachineInfoHandler()
-        collector = MachineInfoCollector(modules, args.ttl)
+        handler = MongoMachineInfoHandler(config.get_section("MongoDB"))
+        #handler = PrintMachineInfoHandler()
+        collector = MachineInfoCollector()
         parser = Parser(collector, handler)
         while True:
             start_time = time.time()
-            parser.parse()
+            result = parser.parse(modules)
+            if result["status"] == "error":
+                print result.message
+            else:
+                print "success handle.\n"
             print "--- %s seconds ---" % (time.time() - start_time)
             time.sleep(args.ttl)
 

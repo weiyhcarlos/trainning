@@ -29,8 +29,9 @@ class Parser(object):
         """
         self.collector = collector
 
-    def parse(self):
+    def parse(self, modules):
         """使用handler处理collector收集的信息
         """
-        self.handler.handle_data(self.collector.collect_info())
-
+        result = self.handler.handle_data(self.collector.collect_info(modules),
+                modules)
+        return result
