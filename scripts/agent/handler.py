@@ -2,7 +2,7 @@
 """handler.py
 """
 
-import json
+import json, os
 
 
 from pymongo import MongoClient
@@ -34,6 +34,19 @@ class Handler(object):
         如：单机使用MongoDB
         """
         pass
+
+    def check_local_data(self):
+        """每次处理前检查有无本地数据,有则上传并清空
+        """
+        pass
+
+    def store_local(self, module, data):
+        """处理数据失败,保存到本地
+        """
+        with open('local_data', 'a') as local_file:
+            local_file.write(module+"\t")
+            json.dump(data, local_file)
+            local_file.write("\n")
 
 class PrintMachineInfoHandler(Handler):
     """以可读形式打印机器信息数据
@@ -91,12 +104,30 @@ class MongoMachineInfoHandler(Handler):
             collection = self.database["net"]
             collection.insert_one(data)
 
+    def check_local_data(self):
+        if os.stat("local_data").st_size != 0:
+            lines = [line.rstrip('\n') for line in open('local_data')]
+            #清空本地存储文件
+            open("local_data", 'w').close()
+            #存储再次上传失败的数据
+            new_fail_data = []
+            for line in lines:
+                module, data = line.split("\t")
+                try:
+                    self.handle(module, json.loads(data))
+                except PyMongoError:
+                    new_fail_data.append((module, data))
+            for fail_data in new_fail_data:
+                self.store_local(fail_data[0], fail_data[1])
+
     def handle_data(self, data, modules):
         """
         将收集得到的数据组装存储到MongoDB
         如果全部模块上传成功返回:{"status":"success","message":""}
         否则返回:{"status":"error", "message":相应错误信息}
         """
+        #检查有无残留本地数据
+        self.check_local_data()
         if not modules:
             return {
                 "status":"error",
@@ -126,6 +157,8 @@ class MongoMachineInfoHandler(Handler):
                 data[module]["machine_id"] = data["mac"]
                 self.handle(module, data[module])
             except PyMongoError:
+                print data[module]
+                self.store_local(module, data[module])
                 error_info += ("upload " + module + " info fail\n")
 
         if error_info != "":

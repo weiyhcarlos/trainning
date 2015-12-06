@@ -71,7 +71,7 @@ def main():
             start_time = time.time()
             result = parser.parse(modules)
             if result["status"] == "error":
-                print result.message
+                print result["message"]
             else:
                 print "success handle.\n"
             print "--- %s seconds ---" % (time.time() - start_time)
