@@ -13,18 +13,6 @@ class BaseHandler(object):
         except KeyError:
             self.local_file = "local_data"
 
-    def callback(self, prefix, name, *args):
-        """存在prefix+name名字的函数时进行调用
-        """
-        method = getattr(self, prefix+name, None)
-        if callable(method):
-            return method(*args)
-
-    def handle(self, handle_part, data):
-        """根据handle_part处理相应模块信息
-        """
-        return self.callback('handle_', handle_part, data)
-
     def check_local_data(self):
         """
         每次处理前检查有无本地数据,有则上传并清空

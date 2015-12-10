@@ -31,7 +31,7 @@ class MongodbHandler(BaseHandler):
             for line in lines:
                 module, data = line.split("\t")
                 try:
-                    self.handle(module, json.loads(data))
+                    self.database[module].insert_one(json.loads(data))
                 except PyMongoError:
                     new_fail_data.append((module, data))
             for fail_data in new_fail_data:
@@ -69,7 +69,9 @@ class MongodbHandler(BaseHandler):
         }
         #机器基础信息上传mongodb
         try:
-            self.handle("base_info", machine_info)
+            collection = self.database["machine"]
+            if not collection.find_one({"_id":machine_info["_id"]}):
+                collection.insert_one(machine_info)
         except PyMongoError:
             return {
                     "status":1,
@@ -86,7 +88,7 @@ class MongodbHandler(BaseHandler):
             try:
                 data[module]["time"] = data["time"]
                 data[module]["machine_id"] = data["mac"]
-                self.handle(module, data[module])
+                self.database[module].insert_one(data[module])
             except PyMongoError:
                 self.store_local(module, data[module])
                 error_info += ("upload " + module + " info fail\n")
@@ -101,31 +103,3 @@ class MongodbHandler(BaseHandler):
                 "status":0,
                 "message":""
             }
-
-    def handle_base_info(self, data):
-        #如果是该机器信息已存入数据库,不处理该数据
-        collection = self.database['machine']
-        if not collection.find_one({"_id":data["_id"]}):
-            collection.insert_one(data)
-
-    def handle_cpu(self, data):
-        collection = self.database["cpu"]
-        collection.insert_one(data)
-
-    def handle_memory(self, data):
-        collection = self.database["memory"]
-        collection.insert_one(data)
-
-    def handle_average_load(self, data):
-        collection = self.database["average_load"]
-        collection.insert_one(data)
-
-    def handle_disk(self, data):
-        collection = self.database["disk"]
-        collection.insert_one(data)
-
-    def handle_net(self, data):
-        #第一次采集net速度时返回空dict, 省略
-        if data:
-            collection = self.database["net"]
-            collection.insert_one(data)
