@@ -1,7 +1,5 @@
 # -*- coding: UTF-8 -*-
 
-import time
-
 class Parser(object):
     """使用handler处理collector收集的信息
     """
@@ -32,6 +30,10 @@ class Parser(object):
     def parse(self, modules):
         """使用handler处理collector收集的信息
         """
-        result = self.handler.handle_data(self.collector.collect_info(modules),
-                modules)
+        data = {
+                "modules":modules,
+                "data":self.collector.collect_info()["ret"]
+        }
+        data["data"]["cluster"] = "test"
+        result = self.handler.handle_data(data)
         return result

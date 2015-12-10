@@ -5,8 +5,8 @@
 import argparse
 import time
 
-from collector import MachineInfoCollector
-from handler import MongoMachineInfoHandler, PrintMachineInfoHandler
+from collector import Collector
+from handler import Handler
 from parser import Parser
 from util import GetConfig
 
@@ -63,14 +63,16 @@ def main():
         else:
             modules = [args.module]
 
-        handler = MongoMachineInfoHandler(config.get_section("MongoDB"))
-        #handler = PrintMachineInfoHandler()
-        collector = MachineInfoCollector()
+        dict_value = {}
+        dict_value["config"] = config.get_section("MongoDB")
+        dict_value["method"] = "mongodb"
+        handler = Handler(dict_value)
+        collector = Collector(modules)
         parser = Parser(collector, handler)
         while True:
             start_time = time.time()
             result = parser.parse(modules)
-            if result["status"] == "error":
+            if result["status"] == 1:
                 print result["message"]
             else:
                 print "success handle.\n"
