@@ -38,29 +38,76 @@
 检测ntp服务是否开启
 
 
-
 ### 2.信息收集
+信息收集类图:
+https://www.processon.com/view/link/566ad86be4b0add117b77c60
 
-#### 2.1加载信息收集模块
-根据配置实例化相应的对象,并返回dict,存放在全局变量.
+收集模块主要结构:
 
-#### 2.2信息收集模块基类
-具体收集信息模块继承基类并做实现即可.
+    Collector类
+        __init__方法 
+            参数: ["cpu","memory",...]
+        
+        set_module方法 
+            参数:["cpu","memory",...]
+            返回:
+                成功则返回{"status":0, "ret":""}
+                失败则返回{"status":1, "ret":error_message}
+        
+        **collect_info方法** (主收集方法)
+            参数:
+                无
+            返回: 
+                成功则返回{"status":0, "ret":收集信息dict}
+                失败则返回{"status":1,"ret":error_message}
+    
+    
+    BaseCollect基类: 实现collect函数
+        MemoryCollector类
+        CpuCollector类
+        DiskCollector类
+        NetCollector类
+        AverageLoadCollector类
 
-### 2.3查询模块
-#### 2.3.1启动查询线程
-
-#### 2.3.2修改参数
-这里可以与工具类下命令行参数解析模块的子类重用.
 
 ### 3.信息处理模块
-信息处理模块,设定基类.具体实现子类直接继承实现.
-例如存储数据库,网络传输.
-#### 3.1数据库存储
-连接数据库//这里是否也可以抽象出来,不同的数据库,实例化对应的实例呢?
+处理模块类图:
+https://www.processon.com/view/link/566ad838e4b0add117b77aac
 
-#### 3.2网络传输
-通过tcp/udp传输.
+处理模块主要结构:
+    
+    Handler类:
+        __init__方法
+            参数:{
+                "method":方法名,           
+                "config":配置dict(包括本地文件存储位置以及连接参数)
+            }
+        
+        set_handler方法
+            参数:{
+                "method":方法名,           
+                "config":配置dict(包括本地文件存储位置以及连接参数)
+            }
+            返回:
+                成功则返回{"status":0, "ret":收集信息dict}
+                失败则返回{"status":1,"ret":error_message}            
+        
+        **handle_data方法** (主处理方法)
+            参数(以dict方式存入):
+                {
+                "modules":["cpu","memory","average_load",
+                            "net","disk"],
+                "data":收集得到的机器信息
+                }
+            返回:
+                成功则返回:{"status":0,"ret":""}
+                失败则返回:{"status":1, "ret":相应错误信息}
+ 
+    BaseHandler类:
+        PrintHandler类 #调试用
+        MongodbHandler类
+        TcpHandler类 #TODO
+
 
 ## 接口
 ### 指标
@@ -160,7 +207,7 @@
 		'disk':
 		{
 			't_cap':100,
-            't_used':100,
+            			't_used':100,
 			't_free':100,
 			't_read_rate':100,
 			't_write_rate':100,
