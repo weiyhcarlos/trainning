@@ -29,7 +29,7 @@ class ArgsParse(Tools):
                            action="store", help="print current version")
         parse.add_argument("-m", "--modules", nargs='*', action='store',
                            help="load modules")
-        parse.add_argument("-t", "--ttl",
+        parse.add_argument("-t", "--ttl",type=int,
                            action="store", help="set agent period, default is 60s")
         self.args = parse.parse_args()
 
@@ -59,6 +59,7 @@ class ArgsParse(Tools):
         Return: if self.isExisted == 0 then exit() else return dict{"modules":dict,"ttl":int}
         """
         ret = {}
+        # print self.args.version
         if self.args.version is not None:
             print "agent current version is %s" % self.version
         if self.args.modules is not None:

@@ -11,6 +11,7 @@ from handler import Handler
 from utils.config import Config
 import os
 import sys
+
 global_vars = {}  # add collect object
 PATH = "config.ini"
 
