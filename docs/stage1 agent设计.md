@@ -13,8 +13,9 @@
 	8. 收集信息  
 	9. 数据处理  
 	10. 数据是否处理成功,是执行11,否则执行12  
-	11. 存储本地,设定标记  
-![](https://www.processon.com/view/565d1019e4b010dc0fb4a43e)
+	11. 存储本地,设定标记
+  
+[流程图](https://www.processon.com/view/565d1019e4b010dc0fb4a43e)
 
 
 ## 模块
@@ -23,24 +24,29 @@
 
 #### 1.1解析配置文件
 读取本地配置文件加载到全局变量中
+code:utils目录下config.py
 
 #### 1.2命令行参数解析
 解析命令行参数,并加载到环境变量中.
 抽象出来.设定一个基类.每增加一个新的参数,直接增加对应的子类处理即可.
+code:utils目录下args_par.py
 
 ##### 1.3修改参数
 修改全局变量
+code:与1.2相同
 
 ##### 1.4查询
 与查询线程通信,返回对应结果
+code:与1.2相同
 
 #### 1.5时间同步
 检测ntp服务是否开启
+code:utils目录下syn_time.py
 
 
 ### 2.信息收集模块
-信息收集类图:
-https://www.processon.com/view/link/566ad86be4b0add117b77c60
+
+[信息收集类图](https://www.processon.com/view/link/566ad86be4b0add117b77c60)
 
 收集模块主要结构:
 
@@ -71,8 +77,7 @@ https://www.processon.com/view/link/566ad86be4b0add117b77c60
 
 
 ### 3.信息处理模块
-处理模块类图:
-https://www.processon.com/view/link/566ad838e4b0add117b77aac
+[处理模块类图](https://www.processon.com/view/link/566ad838e4b0add117b77aac)
 
 处理模块主要结构:
     
