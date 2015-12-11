@@ -38,7 +38,7 @@
 检测ntp服务是否开启
 
 
-### 2.信息收集
+### 2.信息收集模块
 信息收集类图:
 https://www.processon.com/view/link/566ad86be4b0add117b77c60
 
