@@ -11,32 +11,42 @@ from handler import Handler
 from utils.config import Config
 import os
 import sys
-globalVars = {}  # add collect object
-Path = "config.ini"
+global_vars = {}  # add collect object
+PATH = "config.ini"
 
 
 def main():
-    path = "%s/%s" % (sys.path[0], Path)
+    """主方法
+    """
+    path = "%s/%s" % (sys.path[0], PATH)
     # print path
     config = Config(path)
     result = config.run()
-    if result['status'] == 1:
+    if result["status"] == 1:
         return
     ret = result["ret"]
-    globalVars["modules"] = ret['modules']
-    globalVars["Handler"] = ret['Handler']
-    globalVars["ttl"] = ret['ttl']
-    # ttl = ret['ttl']
-    # print ret['modules'], ret['Handler']
-    colObj = Collector(globalVars["modules"])
-    handObj = Handler(globalVars["Handler"])
+    global_vars["modules"] = ret["modules"]
+    global_vars["Handler"] = ret["Handler"]
+    global_vars["ttl"] = ret["ttl"]
+    global_vars["cluster"] = ret["cluster"]
+    #print ret["modules"], ret["Handler"], ret["ttl"]
+    col_obj = Collector(global_vars["modules"])
+    hand_obj = Handler(global_vars["Handler"])
     while True:
-        infos=colObj.collect_info()
-        if infos['status']==1:
+        info = col_obj.collect_info()
+        #收集失败,打印失败信息
+        if info["status"] == 1:
+            print info["ret"]
+            time.sleep(global_vars["ttl"])
             continue
-        handObj.handle_data({'modules':globalVars["modules"],'data':infos['ret']})
-        time.sleep(globalVars["ttl"])
+        info["ret"]["cluster"] = global_vars["cluster"]
+        handle_info = hand_obj.handle_data({"modules":global_vars["modules"],
+            "data":info["ret"]})
+        #处理失败,打印错误信息
+        if handle_info["status"] == 1:
+            print handle_info["ret"]
+        time.sleep(global_vars["ttl"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

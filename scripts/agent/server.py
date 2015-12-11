@@ -5,7 +5,7 @@
 from SocketServer import (TCPServer as TCP,
                           StreamRequestHandler as SRH)
 #import socket
-from agent import globalVars
+from agent import global_vars
 try:
     import simplejson as json
 except ImportError:
@@ -20,13 +20,13 @@ class Server(SRH):
         """set global vars
         """
         try:
-            global globalVars  # global vars from agent.py
+            global global_vars  # global vars from agent.py
             self.str = self.rfile.readline().strip()
             varDict = json.loads(self.str)
             if "ttl" in varDict.keys():
-                globalVars['ttl'] = varDict['ttl']
+                global_vars['ttl'] = varDict['ttl']
             if "modules" in varDict.keys():
-                globalVars['modules'] = globalVars['collectObj'].set()
+                global_vars['modules'] = global_vars['collectObj'].set()
         except ValueError:
             pass
 
