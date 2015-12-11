@@ -51,6 +51,12 @@ class MongodbHandler(BaseHandler):
             如果全部模块上传成功返回:{"status":0,"ret":""}
             否则返回:{"status":1, "ret":相应错误信息}
         """
+        #判断连接是否成功
+        if self.database == None:
+            return {
+                "status":1,
+                "ret":"fail to connect to mongodb."
+            }
         #检查有无残留本地数据
         self.check_local_data()
         modules = params["modules"]
@@ -75,13 +81,18 @@ class MongodbHandler(BaseHandler):
         except PyMongoError:
             return {
                     "status":1,
-                    "ret":"upload machine base info fail"
+                    "ret":"upload machine base info fail."
             }
 
         error_info = ""
 
         #所有收集模块信息上报mongodb
         for module in modules:
+            if module not in data:
+                return {
+                    "status":1,
+                    "ret":"can not find module in data."
+                }
             #第一次收集net信息时为空,跳过该模块处理
             if not data[module]:
                 continue
@@ -91,15 +102,10 @@ class MongodbHandler(BaseHandler):
                 self.database[module].insert_one(data[module])
             except PyMongoError:
                 self.store_local(module, data[module])
-                error_info += ("upload " + module + " info fail\n")
+                error_info += ("upload " + module + " info fail.\n")
 
-        if error_info != "":
-            return {
-                "status":1,
-                "ret":error_info
-            }
-        else:
-            return {
-                "status":0,
-                "message":""
-            }
+        #如果上传失败,转存数据到本地,返回成功,加上哪个模块上传失败的信息
+        return {
+            "status":0,
+            "ret":error_info
+        }

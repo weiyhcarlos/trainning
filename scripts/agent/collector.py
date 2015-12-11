@@ -23,21 +23,35 @@ class Collector(object):
                     "".join([m.capitalize() for m in module.split("_")])
                     +"Collector")
 
-    def set_module(self, modules):
+    def set_modules(self, modules):
         """更换收集模块
         参数:
             更换的模块string list
         返回:
-            无
+            更换模块并实例化成功返回 {"status":0,"ret":""}
+            失败返回{"status":1,"ret":error_message}
         """
         self.modules = modules
-        #如果更换的模块中有未初始化的实例,实例化该模块
+
         for module in self.modules:
-            if module not in self.module_instance.keys():
+            #更换模块没有被初始化过或者之前实例化失败时重新实例化
+            if (module not in self.module_instance.keys() or
+                self.module_instance[module] == None):
                 self.module_instance[module] = str_to_class(
                     "collector_module."+module+"_collector",
                     "".join([m.capitalize() for m in module.split("_")])
                     +"Collector")
+            #如果此次实例化还是失败,返回错误信息
+            if self.module_instance[module] == None:
+                return {
+                        "status":1,
+                        "ret":"fail to set modules for collector."
+                }
+        return {
+                "status":0,
+                "ret":""
+        }
+
 
     def collect_base_info(self):
         """收集机器基础信息

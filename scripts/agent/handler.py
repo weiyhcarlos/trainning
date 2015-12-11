@@ -27,14 +27,27 @@ class Handler(object):
         参数:
             params_dict:{"method":方法名, "config":配置dict}
         返回:
-            无
+            如果成功设置handler,返回{"status":0,"ret":""}
+            设置失败,返回{"status":1,"ret":error_message}
         """
-        self.handler_instance.destroy_connection()
+        #如果存在实例,在更换模块前清理之前模块的连接
+        if self.handler_instance != None:
+            self.handler_instance.destroy_connection()
         method_name = params_dict["method"]
         self.handler_instance = str_to_class(
                     "handler_module."+method_name+"_handler",
                     "".join([m.capitalize() for m in method_name.split("_")])
                     +"Handler", params_dict["config"])
+        #如果实例化失败,返回错误信息
+        if self.handler_instance == None:
+            return {
+                "status":1,
+                "ret":"fail to set handler."
+            }
+        return {
+            "status":0,
+            "ret":""
+        }
 
     def handle_data(self, params):
         """调用子模块的收集方法

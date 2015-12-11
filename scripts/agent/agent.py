@@ -68,12 +68,14 @@ def main():
         dict_value["method"] = "mongodb"
         handler = Handler(dict_value)
         collector = Collector(modules)
+        ret = collector.set_modules(["cpu"])
+        print ret
         parser = Parser(collector, handler)
         while True:
             start_time = time.time()
-            result = parser.parse(modules)
+            result = parser.parse(["cpu"])
             if result["status"] == 1:
-                print result["message"]
+                print result["ret"]
             else:
                 print "success handle.\n"
             print "--- %s seconds ---" % (time.time() - start_time)
