@@ -26,11 +26,11 @@ class ArgsParse(Tools):
             self.port = dic["port"]
         parse = argparse.ArgumentParser()
         parse.add_argument("-v", "--version",
-                           action="store_true", help="print current version")
+                           action="store", help="print current version")
         parse.add_argument("-m", "--modules", nargs='*', action='store',
                            help="load modules")
         parse.add_argument("-t", "--ttl",
-                           action="store_true", help="set agent period, default is 60s")
+                           action="store", help="set agent period, default is 60s")
         self.args = parse.parse_args()
 
     def tcpConnect(self, msg):

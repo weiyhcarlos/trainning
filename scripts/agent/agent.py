@@ -29,6 +29,13 @@ def main():
     global_vars["Handler"] = ret["Handler"]
     global_vars["ttl"] = ret["ttl"]
     global_vars["cluster"] = ret["cluster"]
+    paser = ArgsParse({"isExisted": 0, "version": '1.0'})
+    paras = paser.run()
+    # print paras
+    if "modules" in paras.keys():
+        global_vars["modules"] = paras["modules"]
+    if "ttl" in paras.keys():
+        global_vars["ttl"] = paras['ttl']
     #print ret["modules"], ret["Handler"], ret["ttl"]
     col_obj = Collector(global_vars["modules"])
     hand_obj = Handler(global_vars["Handler"])
