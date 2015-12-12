@@ -24,7 +24,12 @@ class ArgsParse(Tools):
         self.version = dic['version']
         if self.isExisted == 1:
             self.port = dic["port"]
-        parse = argparse.ArgumentParser()
+        parse = argparse.ArgumentParser(
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+            prog='python agent.py',
+            usage='%(prog)s [options]',
+            epilog="Modules:\n  all, cpu, average_load, memory, disk, net\n"
+            )
         # parse.add_argument("-h", "--help",
         #                   action="store_true", help="show this help message and exit")
 
