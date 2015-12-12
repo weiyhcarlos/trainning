@@ -25,12 +25,15 @@ class ArgsParse(Tools):
         if self.isExisted == 1:
             self.port = dic["port"]
         parse = argparse.ArgumentParser()
+        # parse.add_argument("-h", "--help",
+        #                   action="store_true", help="show this help message and exit")
+
         parse.add_argument("-v", "--version",
-                           action="store_true", help="print current version")
+                           action="store_true", help="show program version number and exit")
         parse.add_argument("-m", "--modules", nargs='*', action='store',
-                           help="load modules")
+                           help="use modules MODULES")
         parse.add_argument("-t", "--ttl",type=int,
-                           action="store", help="set agent period, default is 60s")
+                           action="store", help="set agent period, default is 5s")
         self.args = parse.parse_args()
 
     def tcpConnect(self, msg):
@@ -60,8 +63,11 @@ class ArgsParse(Tools):
         """
         ret = {}
         # print self.args.version
+        #if self.args.help:
+        #    sys.exit(0)
         if self.args.version:
             print "agent current version is %s" % self.version
+            sys.exit(0)
         if self.args.modules is not None:
             ret["modules"] = self.args.modules
         if self.args.ttl is not None:
