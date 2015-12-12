@@ -26,7 +26,7 @@ class ArgsParse(Tools):
             self.port = dic["port"]
         parse = argparse.ArgumentParser()
         parse.add_argument("-v", "--version",
-                           action="store", help="print current version")
+                           action="store_true", help="print current version")
         parse.add_argument("-m", "--modules", nargs='*', action='store',
                            help="load modules")
         parse.add_argument("-t", "--ttl",type=int,
@@ -60,7 +60,7 @@ class ArgsParse(Tools):
         """
         ret = {}
         # print self.args.version
-        if self.args.version is not None:
+        if self.args.version:
             print "agent current version is %s" % self.version
         if self.args.modules is not None:
             ret["modules"] = self.args.modules
