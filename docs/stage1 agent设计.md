@@ -154,8 +154,10 @@ code:utils目录下syn_time.py
 	考虑多块网卡情形
 
 	指标 含义
-	read  网络读 
-	write 网络写
+    t_sent_rate 总发送速率
+    t_recv_rate 总接收速率
+	sent_rate  单个网卡发送速率
+	recv_rate 单个网卡接收速率
 
 
 #### disk
@@ -171,78 +173,78 @@ code:utils目录下syn_time.py
 	cap   单块磁盘容量 GB
     used  单块磁盘使用 GB
 	free  单块磁盘剩余 GB
-	read  单块磁盘读 MB/s
-	write 单块磁盘写 MB/s
+	read_rate  单块磁盘读 MB/s
+	write_rate 单块磁盘写 MB/s
 
 
 ### 数据消息内容
 	{
-		'cluster':'XXX',
-		'ip':'1.1.1.1',
-		'mac':'00:00:00:00:00:00',
-		'hostname':'XXX',
-		'time':'2015-12-09 11:16:32',
-		'cpu':
+		"cluster":"XXX",
+		"ip":"1.1.1.1",
+		"mac":"00:00:00:00:00:00",
+		"hostname":"XXX",
+		"time":"2015-12-09 11:16:32",
+		"cpu":
 		{
-			'user':0,
-			'user':0,
-			'nice':0,
-			'system':0,
-			'idle':0,
-			'iowait':0,
-			'irq':0,
-			'softirq':0,
-			'steal':0,
-			'guest':0,
-			'guest_nice':0,
+			"user":0,
+			"user":0,
+			"nice":0,
+			"system":0,
+			"idle":0,
+			"iowait":0,
+			"irq":0,
+			"softirq":0,
+			"steal":0,
+			"guest":0,
+			"guest_nice":0,
 			//暂省略cpu信息,例如个数.
 		},
-		'mem':
+		"mem":
 		{
-			'total':100,
-			'used':100,
-			'abs_used':100,
-			'free':100,
-			'buffers':100,
-			'cached':100,
-			'active':100,
-			'inactive':100,
-			'swap_used':100,
+			"total":100,
+			"used":100,
+			"abs_used":100,
+			"free":100,
+			"buffers":100,
+			"cached":100,
+			"active":100,
+			"inactive":100,
+			"swap_used":100,
 		},
-		'disk':
+		"disk":
 		{
-			't_cap':100,
-            't_used':100,
-			't_free':100,
-			't_read_rate':100,
-			't_write_rate':100,
-			'per_disk_info':[
+			"t_cap":100,
+            "t_used":100,
+			"t_free":100,
+			"t_read_rate":100,
+			"t_write_rate":100,
+			"per_disk_info":[
                 {
-                    'disk_name':'sda1',
-					'cap':1000,
-                    'used':100,
-					'free':100,
-					'read':1,
-					'write':1,
+                    "disk_name":"sda1",
+					"cap":1000,
+                    "used":100,
+					"free":100,
+					"read_rate":1,
+					"write_rate":1,
 				},
 				{
-					'disk_name':'sda2',
-					'cap':1000,
-					'free':100,
-					'read':1,
-					'write':1,
+					"disk_name":"sda2",
+					"cap":1000,
+					"free":100,
+					"read_rate":1,
+					"write_rate":1,
 				}
 			]
 		},
-		'net':
+		"net":
         {
-            'per_net_info':[
+            "t_sent_rate":100,
+            "t_recv_rate":100,
+            "per_net_info":[
                 {
-                    'net_name':'eth0',
-                    'sent_rate':100,
-                    'recv_rate':100,
-                    'packets_sent_rate':100,
-                    'packets_recv_rate':100,
+                    "net_name":"eth0",
+                    "sent_rate":100,
+                    "recv_rate":100,
                 },
                 {
                     ...

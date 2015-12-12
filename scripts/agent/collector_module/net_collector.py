@@ -2,7 +2,6 @@
 """网络信息收集模块
 """
 
-import os, socket
 from datetime import datetime
 
 import psutil
@@ -37,7 +36,7 @@ class NetCollector(BaseCollector):
         current_net_info = psutil.net_io_counters(pernic=True)
         interval = (datetime.now()-self.last_net_time).seconds
 
-        #根据上次缓存值计算相应速率,转为KB/S,包速率转为个/s
+        #根据上次缓存值计算相应速率,转为KB/S
         for name in current_net_info.keys():
             return_info["per_net_info"].append({
                 "net_name":name,
@@ -45,10 +44,12 @@ class NetCollector(BaseCollector):
                     self.last_net_info[name].bytes_sent)/(interval*1024),
                 "recv_rate":float(current_net_info[name].bytes_recv-
                     self.last_net_info[name].bytes_recv)/(interval*1024),
-                "packets_sent_rate":float(current_net_info[name].packets_sent-
-                    self.last_net_info[name].packets_sent)/interval,
-                "packets_recv_rate":float(current_net_info[name].packets_recv-
-                    self.last_net_info[name].packets_recv)/interval
                 })
+
+        #根据每个磁盘的速率计算总磁盘速率
+        return_info["t_sent_rate"] = sum(u["sent_rate"] for u in
+                return_info["per_net_info"])
+        return_info["t_recv_rate"] = sum(u["recv_rate"] for u in
+                return_info["per_net_info"])
 
         return return_info
