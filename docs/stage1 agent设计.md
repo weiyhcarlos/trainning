@@ -181,7 +181,7 @@ code:utils目录下syn_time.py
 		'ip':'1.1.1.1',
 		'mac':'00:00:00:00:00:00',
 		'hostname':'XXX',
-		'time':100000(秒数)
+		'time':'2015-12-09 11:16:32',
 		'cpu':
 		{
 			'user':0,
@@ -212,7 +212,7 @@ code:utils目录下syn_time.py
 		'disk':
 		{
 			't_cap':100,
-            			't_used':100,
+            't_used':100,
 			't_free':100,
 			't_read_rate':100,
 			't_write_rate':100,
