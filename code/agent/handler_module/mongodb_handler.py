@@ -5,7 +5,7 @@
 import json, os
 
 from pymongo import MongoClient
-from pymongo.errors import PyMongoError
+from pymongo.errors import PyMongoError, ConnectionFailure
 
 from . import BaseHandler
 
@@ -22,7 +22,8 @@ class MongodbHandler(BaseHandler):
         self.database = self.client[config['database']]
 
     def check_local_data(self):
-        if os.stat(self.local_file).st_size != 0:
+        if (os.path.isfile(self.local_file) and
+            os.stat(self.local_file).st_size != 0):
             lines = [line.rstrip('\n') for line in open('local_data')]
             #清空本地存储文件
             open("local_data", 'w').close()
@@ -52,10 +53,12 @@ class MongodbHandler(BaseHandler):
             否则返回:{"status":1, "ret":相应错误信息}
         """
         #判断连接是否成功
-        if self.database == None:
+        try:
+            self.database.collection_names()
+        except ConnectionFailure:
             return {
                 "status":1,
-                "ret":"fail to connect to mongodb."
+                "ret":"fail to connect mongodb."
             }
         #检查有无残留本地数据
         self.check_local_data()
@@ -64,7 +67,7 @@ class MongodbHandler(BaseHandler):
         if not modules:
             return {
                 "status":1,
-                "ret":"modules is not valid"
+                "ret":"modules is not valid."
             }
 
         machine_info = {
@@ -83,7 +86,6 @@ class MongodbHandler(BaseHandler):
                     "status":1,
                     "ret":"upload machine base info fail."
             }
-
         error_info = ""
 
         #所有收集模块信息上报mongodb
@@ -104,8 +106,13 @@ class MongodbHandler(BaseHandler):
                 self.store_local(module, data[module])
                 error_info += ("upload " + module + " info fail.\n")
 
-        #如果上传失败,转存数据到本地,返回成功,加上哪个模块上传失败的信息
+        #如果上传失败,转存数据到本地,返回失败,加上哪个模块上传失败的信息
+        if error_info == "":
+            return {
+                "status":1,
+                "ret":error_info
+            }
         return {
             "status":0,
-            "ret":error_info
+            "ret":""
         }

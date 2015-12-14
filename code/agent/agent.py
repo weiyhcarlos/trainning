@@ -58,7 +58,10 @@ def main():
         #处理失败,打印错误信息
         if handle_info["status"] == 1:
             print handle_info["ret"]
-        print "successfully handle data!"
+            if handle_info["ret"] == "fail to connect mongodb.":
+                exit(1)
+        else:
+            print "successfully handle data!"
         print "--- %s seconds ---\n" % (time.time() - start_time)
         time.sleep(global_vars["ttl"])
         cycle_time += 1
