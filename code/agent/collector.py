@@ -28,7 +28,7 @@ class Collector(object):
         参数:
             更换的模块string list
         返回:
-            更换模块并实例化成功返回 {"status":0,"ret":""}
+            更换模块并实例化成功返回 {"status":0,"ret":module list}
             失败返回{"status":1,"ret":error_message}
         """
         self.modules = modules
@@ -49,7 +49,7 @@ class Collector(object):
                 }
         return {
                 "status":0,
-                "ret":""
+                "ret":self.modules
         }
 
 
