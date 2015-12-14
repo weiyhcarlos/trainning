@@ -70,6 +70,7 @@ class MongodbHandler(BaseHandler):
                 "ret":"modules is not valid."
             }
 
+        error_info = ""
         machine_info = {
             "_id":data["mac"],
             "ip":data["ip"],
@@ -82,11 +83,9 @@ class MongodbHandler(BaseHandler):
             if not collection.find_one({"_id":machine_info["_id"]}):
                 collection.insert_one(machine_info)
         except PyMongoError:
-            return {
-                    "status":1,
-                    "ret":"upload machine base info fail."
-            }
-        error_info = ""
+            self.store_local("machine", machine_info)
+            error_info += ("upload machine base info fail.\n")
+
 
         #所有收集模块信息上报mongodb
         for module in modules:
