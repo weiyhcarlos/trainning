@@ -106,7 +106,7 @@ class MongodbHandler(BaseHandler):
                 error_info += ("upload " + module + " info fail.\n")
 
         #如果上传失败,转存数据到本地,返回失败,加上哪个模块上传失败的信息
-        if error_info == "":
+        if error_info != "":
             return {
                 "status":1,
                 "ret":error_info
