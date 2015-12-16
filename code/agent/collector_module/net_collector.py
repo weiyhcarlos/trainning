@@ -38,12 +38,14 @@ class NetCollector(BaseCollector):
 
         #根据上次缓存值计算相应速率,转为KB/S
         for name in current_net_info.keys():
-            return_info["per_net_info"].append({
-                "net_name":name,
-                "sent_rate":float(current_net_info[name].bytes_sent-
-                    self.last_net_info[name].bytes_sent)/(interval*1024),
-                "recv_rate":float(current_net_info[name].bytes_recv-
-                    self.last_net_info[name].bytes_recv)/(interval*1024),
+            #过滤回环以及docker的网卡
+            if name != "lo" and not name.startswith("veth"):
+                return_info["per_net_info"].append({
+                    "net_name":name,
+                    "sent_rate":float(current_net_info[name].bytes_sent-
+                        self.last_net_info[name].bytes_sent)/(interval*1024),
+                    "recv_rate":float(current_net_info[name].bytes_recv-
+                        self.last_net_info[name].bytes_recv)/(interval*1024),
                 })
 
         #根据每个磁盘的速率计算总磁盘速率
