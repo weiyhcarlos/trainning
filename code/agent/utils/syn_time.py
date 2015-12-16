@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import subprocess
+import os
 
 
 def syn_time():
-    result = subprocess.call(["sh", "./syn_time.sh"])
+    path = "%s/utils/syn_time.sh" % os.path.curdir
+    #print path
+    result = subprocess.call(["sh", path])
     return result
 
 if __name__ == '__main__':

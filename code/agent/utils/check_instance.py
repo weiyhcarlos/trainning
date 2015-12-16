@@ -23,25 +23,35 @@ class CheckInstance(Tools):
         Return: dict{'status':0(existed) or 1(not existed)}
         """
         ret = {}
+        child = subprocess.Popen(
+            "ps -ef | grep agent.py | wc -l", shell=True, stdout=subprocess.PIPE)
+        child.wait()
+        #for line in child.stdout.readlines():
+        #    print line
+        num = string.atoi(child.stdout.read())
+        #print "check_ins num:%d" % num
+        if num > 3:
+            ret['status'] = 0
+            return ret
         try:
-            child = subprocess.Popen("ps -ef | grep agent.py|wc -l")
-            child.wait()
-            num = string.atoi(child.stdout.read())
-            if num > 2:
-                ret['status'] = 0
-                return ret
             addr = ('127.0.0.1', self.port)
             client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             client.settimeout(1)
             client.connect(addr)
-        except socket.error:
-            ret['status'] = 0
+        except socket.error, e:
+            # print e
+            client.close()
+            ret['status'] = 1
         except Exception:
+            client.close()
             ret['status'] = 1
         else:
-            ret['status'] = 1
-        finally:
             client.close()
+            #print "port used"
+            ret['status'] = 0
+        finally:
+            # client.close()
+            #print "chec_ins ret:%s" % ret
             return ret
 
 

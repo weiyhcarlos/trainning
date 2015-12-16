@@ -22,22 +22,22 @@ class ArgsParse(Tools):
         """
         self.isExisted = dic["isExisted"]
         self.version = dic['version']
-        if self.isExisted == 1:
+        if self.isExisted == 0:
             self.port = dic["port"]
         parse = argparse.ArgumentParser(
             formatter_class=argparse.RawDescriptionHelpFormatter,
             prog='python agent.py',
             usage='%(prog)s [options]',
             epilog="Modules:\n  all, cpu, average_load, memory, disk, net\n"
-            )
+        )
         # parse.add_argument("-h", "--help",
-        #                   action="store_true", help="show this help message and exit")
+        # action="store_true", help="show this help message and exit")
 
         parse.add_argument("-v", "--version",
                            action="store_true", help="show program version number and exit")
         parse.add_argument("-m", "--modules", nargs='*', action='store',
                            help="use modules MODULES")
-        parse.add_argument("-t", "--ttl",type=int,
+        parse.add_argument("-t", "--ttl", type=int,
                            action="store", help="set agent period, default is 5s")
         self.args = parse.parse_args()
 
@@ -68,7 +68,7 @@ class ArgsParse(Tools):
         """
         ret = {}
         # print self.args.version
-        #if self.args.help:
+        # if self.args.help:
         #    sys.exit(0)
         if self.args.version:
             print "agent current version is %s" % self.version
@@ -77,8 +77,10 @@ class ArgsParse(Tools):
             ret["modules"] = self.args.modules
         if self.args.ttl is not None:
             ret["ttl"] = self.args.ttl
-        if self.isExisted == 1:
-            self.tcpConnect(json.load(ret))
+        # print json.dumps(ret)
+        if self.isExisted == 0 and len(ret) > 0:
+            print json.dumps(ret)
+            print self.tcpConnect(json.dumps(ret))
             sys.exit(0)
         else:
             return ret
