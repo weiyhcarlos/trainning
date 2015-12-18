@@ -12,12 +12,12 @@ class Config(Tools):
     """analyze confige file with yaml
     """
 
-    def __init__(self, configPath):
+    def __init__(self, config_path):
         """init Config object
         Args: configPath:  string,and path of config file
         Return: None
         """
-        self.path = configPath
+        self.path = config_path
 
     def run(self):
         """ analyze config file

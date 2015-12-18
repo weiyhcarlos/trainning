@@ -34,15 +34,15 @@ class Server:
                 sock, addr = self.tcp_sock.accept()
                 # print "Server global1:%d" % global_vars['ttl']
                 str = sock.recv(1024)
-                varDict = json.loads(str)
+                var_dict = json.loads(str)
                 print "server read:%s" % str
-                if "ttl" in varDict.keys():
+                if "ttl" in var_dict.keys():
                     # print 'ttl in dict'
-                    global_vars['ttl'] = varDict['ttl']
+                    global_vars['ttl'] = var_dict['ttl']
                 # print "Server global2:%d" % global_vars['ttl']
-                if "modules" in varDict.keys():
+                if "modules" in var_dict.keys():
                     ret = global_vars[
-                        'collectObj'].set_modules(varDict["modules"])
+                        'collectObj'].set_modules(var_dict["modules"])
                     if ret['status'] == 0:
                         global_vars['modules'] = ret['ret']
                     # print global_vars['modules']

@@ -20,9 +20,9 @@ class ArgsParse(Tools):
         Args: dic: a dict contains isExisted(instance is created or not.0 existed,1 not existed),version,port(if isExisted == 0 then port must be set)
         Return:None
         """
-        self.isExisted = dic["isExisted"]
+        self.is_existed = dic["isExisted"]
         self.version = dic['version']
-        if self.isExisted == 0:
+        if self.is_existed == 0:
             self.port = dic["port"]
         parse = argparse.ArgumentParser(
             formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -78,7 +78,7 @@ class ArgsParse(Tools):
         if self.args.ttl is not None:
             ret["ttl"] = self.args.ttl
         # print json.dumps(ret)
-        if self.isExisted == 0 and len(ret) > 0:
+        if self.is_existed == 0 and len(ret) > 0:
             print json.dumps(ret)
             print self.tcpConnect(json.dumps(ret))
             sys.exit(0)
