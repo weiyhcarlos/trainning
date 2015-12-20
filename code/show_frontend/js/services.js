@@ -1,9 +1,8 @@
 /**
- *  Module
- *
- * Description
+ * 服务模块,自定义服务
  */
 angular.module('MachineInfo.services', [])
+    //存储全局state变量
     .value('stateValue', {
         realTime: true,
         operatorCount: 0,
@@ -55,6 +54,8 @@ angular.module('MachineInfo.services', [])
             }
         },
         graphWidth: 20,
+        //加载单次数据,当数据数组长度超过graphwidth,
+        //移除最早的数据, 使得动态加载时保持固定展示长度
         load: function(data) {
             userPoint = this.percentage.user.datapoints;
             if (userPoint.length == 0 || data.time.localeCompare(
@@ -72,6 +73,7 @@ angular.module('MachineInfo.services', [])
                 }
             }
         },
+        // 使用新的数据数组进行初始化
         reInit: function(data) {
             for (var key in this.percentage)
                 this.percentage[key].datapoints.length = 0;
@@ -86,8 +88,8 @@ angular.module('MachineInfo.services', [])
                     });
                 }
             }
-            console.log(this.percentage);
         },
+        // 清空数据
         clear: function() {
             for (var key in this.percentage)
                 this.percentage[key].datapoints.length = 0;
@@ -133,6 +135,8 @@ angular.module('MachineInfo.services', [])
             }
         },
         graphWidth: 20,
+        //加载单次数据,当数据数组长度超过graphwidth,
+        //移除最早的数据, 使得动态加载时保持固定展示长度
         load: function(data) {
             totalPoint = this.usage.total.datapoints;
             if (totalPoint.length == 0 || data.time.localeCompare(
@@ -150,6 +154,7 @@ angular.module('MachineInfo.services', [])
                 }
             }
         },
+        // 使用新的数据数组进行初始化
         reInit: function(data) {
             for (var key in this.usage)
                 this.usage[key].datapoints.length = 0;
@@ -164,8 +169,8 @@ angular.module('MachineInfo.services', [])
                     });
                 }
             }
-            console.log(this.usage);
         },
+        // 清空数据
         clear: function() {
             for (var key in this.usage)
                 this.usage[key].datapoints.length = 0;
@@ -185,6 +190,8 @@ angular.module('MachineInfo.services', [])
             datapoints: []
         },
         graphWidth: 20,
+        //加载单次数据,当数据数组长度超过graphwidth,
+        //移除最早的数据, 使得动态加载时保持固定展示长度
         load: function(data) {
             w1Point = this.w1Avg.datapoints;
             w2Point = this.w2Avg.datapoints;
@@ -210,6 +217,7 @@ angular.module('MachineInfo.services', [])
                 }
             }
         },
+        // 使用新的数据数组进行初始化
         reInit: function(data) {
             w1Point = this.w1Avg.datapoints;
             w2Point = this.w2Avg.datapoints;
@@ -232,6 +240,7 @@ angular.module('MachineInfo.services', [])
                 });
             }
         },
+        // 清空数据
         clear: function() {
             this.w1Avg.datapoints.length = 0;
             this.w2Avg.datapoints.length = 0;
@@ -248,6 +257,8 @@ angular.module('MachineInfo.services', [])
             datapoints: []
         },
         graphWidth: 20,
+        //加载单次数据,当数据数组长度超过graphwidth,
+        //移除最早的数据, 使得动态加载时保持固定展示长度
         load: function(data) {
             sentPoint = this.sentRate.datapoints;
             recvPoint = this.recvRate.datapoints;
@@ -267,6 +278,7 @@ angular.module('MachineInfo.services', [])
                 }
             }
         },
+        // 使用新的数据数组进行初始化
         reInit: function(data) {
             sentPoint = this.sentRate.datapoints;
             recvPoint = this.recvRate.datapoints;
@@ -283,6 +295,7 @@ angular.module('MachineInfo.services', [])
                 });
             }
         },
+        // 清空数据
         clear: function() {
             this.sentRate.datapoints.length = 0;
             this.recvRate.datapoints.length = 0;
@@ -298,6 +311,8 @@ angular.module('MachineInfo.services', [])
             datapoints: []
         },
         graphWidth: 20,
+        //加载单次数据,当数据数组长度超过graphwidth,
+        //移除最早的数据, 使得动态加载时保持固定展示长度
         load: function(data) {
             readPoint = this.readRate.datapoints;
             writePoint = this.writeRate.datapoints;
@@ -317,6 +332,7 @@ angular.module('MachineInfo.services', [])
                 }
             }
         },
+        // 使用新的数据数组进行初始化
         reInit: function(data) {
             readPoint = this.readRate.datapoints;
             writePoint = this.writeRate.datapoints;
@@ -333,6 +349,7 @@ angular.module('MachineInfo.services', [])
                 });
             }
         },
+        // 清空数据
         clear: function() {
             this.readRate.datapoints.length = 0;
             this.writeRate.datapoints.length = 0;
@@ -352,6 +369,8 @@ angular.module('MachineInfo.services', [])
             datapoints: []
         },
         graphWidth: 20,
+        //加载单次数据,当数据数组长度超过graphwidth,
+        //移除最早的数据, 使得动态加载时保持固定展示长度
         load: function(data) {
             totalPoint = this.total.datapoints;
             usedPoint = this.used.datapoints;
@@ -377,6 +396,7 @@ angular.module('MachineInfo.services', [])
                 }
             }
         },
+        // 使用新的数据数组进行初始化
         reInit: function(data) {
             totalPoint = this.total.datapoints;
             usedPoint = this.used.datapoints;
@@ -399,28 +419,34 @@ angular.module('MachineInfo.services', [])
                 });
             }
         },
+        // 清空数据
         clear: function() {
             this.total.datapoints.length = 0;
             this.used.datapoints.length = 0;
             this.free.datapoints.length = 0;
         }
     })
+    //定义后台数据交互服务
     .service('dataFactory', ['$http', function($http) {
+        //数据api url
         var urlBase = "http://test.com:8888";
 
+        // 获取机器信息列表 
         this.getMachines = function() {
             return $http.get(urlBase + "/monitor/api/machines");
         };
 
+        //获取单个机器最新信息
         this.getMachine = function(machineUrl) {
             return $http.get(urlBase + machineUrl);
         }
 
-        this.getModule = function(machineUrl, module, beginDate, endDate) {
-            console.log(beginDate.format("isoDateTime"), endDate.format("isoDateTime"));
-            targetUrl = urlBase + machineUrl + "/search?module=" + module + "&begin_date=" + beginDate.format("isoDateTime").replace(/T/g, " ") + "&end_date=" +
-                endDate.format("isoDateTime").replace(/T/g, " ");
-            console.log(targetUrl);
+        //获得单个模块指定日期区间的数据
+        this.getModule = function(machineUrl, module,
+            beginDate, endDate) {
+            targetUrl = urlBase + machineUrl + "/search?module=" + 
+            module + "&begin_date=" + beginDate.format("isoDateTime").replace(/T/g, " ") 
+            + "&end_date=" + endDate.format("isoDateTime").replace(/T/g, " ");
             return $http.get(targetUrl);
         }
     }]);

@@ -1,11 +1,3 @@
-.nav,
-.pagination,
-.carousel,
-.panel-title a {
-    cursor: pointer;
-}
-
-
 /*.navbar-custom {
     background-color:#229922;
     color:#ffffff;
@@ -35,7 +27,6 @@
 
 .barcode {
     white-space: pre;
-    /* or pre-wrap if you want wrapping to still work. */
 }
 
 .page-header {
