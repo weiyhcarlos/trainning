@@ -1,0 +1,65 @@
+<div class="container container-full">
+    <div class="row" ng-controller="TopController">
+        <div class="col-md-4">
+            <form name="myForm">
+                <label for="mySelect" class="control-label" style="height:36px">选择机器:</label>
+                <select name="mySelect" class="btn selectpicker btn-default" style="height:36px" ng-options="option.mac for option in machineList" ng-model="stateValue.selectedMachine"></select>
+            </form>
+            <!--             <div ng-dropdown-multiselect="" options="machineList" selected-model="$root.selectedMachine" extra-settings="machineListSettings"></div>
+        -->
+        </div>
+        <div class="col-md-8">
+            <label for="begin_date" class="control-label">from:</label>
+            <input type="datetime-local" id="begin_date" class="btn selectpicker btn-default" name="input" ng-model="stateValue.begin_date" placeholder="yyyy-MM-ddTHH:mm:ss" required />
+            <label for="end_date" class="control-label">to:</label>
+            <input type="datetime-local" id="end_date" class="btn selectpicker btn-default" name="input" ng-model="stateValue.end_date" placeholder="yyyy-MM-ddTHH:mm:ss" required />
+            <!-- <span>{{ begin_date | date: "yyyy-MM-ddTHH:mm:ss"}} , {{ end_date | date: "yyyy-MM-ddTHH:mm:ss"}}</span> -->
+            <button ng-click="setSearch()" class="btn btn-default" ng-disabled="myForm.input.$valid">查询</button>
+            <button ng-click="setRealTime()" class="btn btn-default">实时</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3" style="margin-top:20px">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="list-group">
+                        <a ui-sref="index" class="list-group-item">基础信息</a>
+                        <a ui-sref="index.cpu" class="list-group-item">CPU使用</a>
+                        <a ui-sref="index.memory" class="list-group-item">内存使用</a>
+                        <a ui-sref="index.average_load" class="list-group-item">平均负载</a>
+                        <a ui-sref="index.net" class="list-group-item">网卡读写</a>
+                        <a ui-sref="index.disk_usage" class="list-group-item">磁盘使用</a>
+                        <a ui-sref="index.disk_rate" class="list-group-item">磁盘读写</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div ui-view>
+                <div ng-controller="BaseController">
+                    <h3 class="page-header">
+        Machine Base Info:
+    </h3>
+                    <table st-table="[stateValue.selectedMachine]" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>mac</th>
+                                <th>ip</th>
+                                <th>hostname</th>
+                                <th>cluster</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in [stateValue.selectedMachine]">
+                                <td>{{row.mac}}</td>
+                                <td>{{row.ip}}</td>
+                                <td>{{row.hostname}}</td>
+                                <td>{{row.cluster}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
