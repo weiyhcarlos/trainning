@@ -147,7 +147,7 @@ angular.module('MachineInfo.services', [])
                     usagePoint = this.usage[key].datapoints;
                     usagePoint.push({
                         x: data["time"],
-                        y: data[key]
+                        y: (data[key]/(1024*1024)).toFixed(3)
                     });
                     if (usagePoint.length > this.graphWidth)
                         usagePoint.shift();
@@ -165,7 +165,7 @@ angular.module('MachineInfo.services', [])
                     usagePoint = this.usage[key].datapoints;
                     usagePoint.push({
                         x: data[i]["time"],
-                        y: data[i][key]
+                        y: (data[i][key]/(1024*1024)).toFixed(3)
                     });
                 }
             }
@@ -266,11 +266,11 @@ angular.module('MachineInfo.services', [])
                     sentPoint[sentPoint.length - 1].x)) {
                 sentPoint.push({
                     x: data["time"],
-                    y: data["t_sent_rate"]
+                    y: (data["t_sent_rate"]/1024).toFixed(3)
                 });
                 recvPoint.push({
                     x: data["time"],
-                    y: data["t_recv_rate"]
+                    y: (data["t_recv_rate"]/1024).toFixed(3)
                 });
                 if (sentPoint.length > this.graphWidth) {
                     sentPoint.shift();
@@ -287,11 +287,11 @@ angular.module('MachineInfo.services', [])
             for (var i = 0; i < data.length; i++) {
                 sentPoint.push({
                     x: data[i]["time"],
-                    y: data[i]["t_sent_rate"]
+                    y: (data[i]["t_sent_rate"]/1024).toFixed(3)
                 });
                 recvPoint.push({
                     x: data[i]["time"],
-                    y: data[i]["t_recv_rate"]
+                    y: (data[i]["t_recv_rate"]/1024).toFixed(3)
                 });
             }
         },
@@ -320,11 +320,11 @@ angular.module('MachineInfo.services', [])
                     readPoint[readPoint.length - 1].x)) {
                 readPoint.push({
                     x: data["time"],
-                    y: data["t_read_rate"]
+                    y: (data["t_read_rate"]/(1024*1024)).toFixed(3)
                 });
                 writePoint.push({
                     x: data["time"],
-                    y: data["t_write_rate"]
+                    y: (data["t_write_rate"]/(1024*1024)).toFixed(3)
                 });
                 if (readPoint.length > this.graphWidth) {
                     readPoint.shift();
@@ -341,11 +341,11 @@ angular.module('MachineInfo.services', [])
             for (var i = 0; i < data.length; i++) {
                 readPoint.push({
                     x: data[i]["time"],
-                    y: data[i]["t_read_rate"]
+                    y: (data[i]["t_read_rate"]/(1024*1024)).toFixed(3)
                 });
                 writePoint.push({
                     x: data[i]["time"],
-                    y: data[i]["t_read_rate"]
+                    y: (data[i]["t_write_rate"]/(1024*1024)).toFixed(3)
                 });
             }
         },
@@ -379,15 +379,15 @@ angular.module('MachineInfo.services', [])
                     totalPoint[totalPoint.length - 1].x)) {
                 totalPoint.push({
                     x: data["time"],
-                    y: data["t_cap"]
+                    y: (data["t_cap"]/(1024*1024*1024)).toFixed(3)
                 });
                 usedPoint.push({
                     x: data["time"],
-                    y: data["t_used"]
+                    y: (data["t_used"]/(1024*1024*1024)).toFixed(3)
                 });
                 freePoint.push({
                     x: data["time"],
-                    y: data["t_free"]
+                    y: (data["t_free"]/(1024*1024*1024)).toFixed(3)
                 });
                 if (totalPoint.length > this.graphWidth) {
                     totalPoint.shift();
@@ -407,15 +407,15 @@ angular.module('MachineInfo.services', [])
             for (var i = 0; i < data.length; i++) {
                 totalPoint.push({
                     x: data[i]["time"],
-                    y: data[i]["t_cap"]
+                    y: (data[i]["t_cap"]/(1024*1024*1024)).toFixed(3)
                 });
                 usedPoint.push({
                     x: data[i]["time"],
-                    y: data[i]["t_used"]
+                    y: (data[i]["t_used"]/(1024*1024*1024)).toFixed(3)
                 });
                 freePoint.push({
                     x: data[i]["time"],
-                    y: data[i]["t_free"]
+                    y: (data["t_free"]/(1024*1024*1024)).toFixed(3)
                 });
             }
         },
