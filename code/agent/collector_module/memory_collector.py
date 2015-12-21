@@ -34,7 +34,4 @@ class MemoryCollector(BaseCollector):
             "inactive":virtual_mem_info.inactive,
             "swap_used":swap_mem_info.used
         }
-        #将数值转为MB
-        for key, value in target_info.iteritems():
-            target_info[key] = float(value)/(1024*1024)
         return target_info

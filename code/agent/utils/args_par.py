@@ -17,7 +17,9 @@ class ArgsParse(Tools):
 
     def __init__(self, dic):
         """init ArgsParse obj. [-v -m -t] paras
-        Args: dic: a dict contains isExisted(instance is created or not.0 existed,1 not existed),version,port(if isExisted == 0 then port must be set)
+        Args: dic: a dict contains isExisted(instance is created or not.
+            0 existed, 1 not existed),version,
+            port(if isExisted == 0 then port must be set)
         Return:None
         """
         self.isExisted = dic["isExisted"]
@@ -33,8 +35,8 @@ class ArgsParse(Tools):
         # parse.add_argument("-h", "--help",
         # action="store_true", help="show this help message and exit")
 
-        parse.add_argument("-v", "--version",
-                           action="store_true", help="show program version number and exit")
+        parse.add_argument("-v", "--version", action="store_true",
+            help="show program version number and exit")
         parse.add_argument("-m", "--modules", nargs='*', action='store',
                            help="use modules MODULES")
         parse.add_argument("-t", "--ttl", type=int,
@@ -64,7 +66,8 @@ class ArgsParse(Tools):
     def run(self):
         """analysis  parameter and execute related flow
         Args: None
-        Return: if self.isExisted == 0 then exit() else return dict{"modules":dict,"ttl":int}
+        Return: if self.isExisted == 0 then exit() 
+                else return dict{"modules":dict,"ttl":int}
         """
         ret = {}
         # print self.args.version

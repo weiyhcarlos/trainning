@@ -42,8 +42,7 @@ def infos_func(global_vars):
             continue
         print "successfully collect info!"
         info["ret"]["cluster"] = global_vars["cluster"]
-        handle_info = hand_obj.handle_data({"modules": global_vars["modules"],
-                                            "data": info["ret"]})
+        handle_info = hand_obj.handle_data(global_vars["modules"], info["ret"])
         # 处理失败,打印错误信息
         if handle_info["status"] == 1:
             print handle_info["ret"]

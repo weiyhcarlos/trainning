@@ -24,7 +24,8 @@ class CheckInstance(Tools):
         """
         ret = {}
         child = subprocess.Popen(
-            "ps -ef | grep agent.py | wc -l", shell=True, stdout=subprocess.PIPE)
+            "ps -ef | grep agent.py | wc -l", shell=True,
+            stdout=subprocess.PIPE)
         child.wait()
         #for line in child.stdout.readlines():
         #    print line

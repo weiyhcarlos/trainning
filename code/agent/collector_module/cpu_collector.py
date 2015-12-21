@@ -18,7 +18,7 @@ class CpuCollector(BaseCollector):
         返回:
             CPU使用率dict
         """
-        cpu_info = psutil.cpu_times()
+        cpu_info = psutil.cpu_times_percent()
         target_info = {
             "user":cpu_info.user,
             "nice":cpu_info.nice,
@@ -31,9 +31,5 @@ class CpuCollector(BaseCollector):
             "guest":cpu_info.guest,
             "guest_nice":cpu_info.guest_nice
             }
-        sum_result = sum(target_info.values())
-        #将数值转为比率
-        for key, value in target_info.iteritems():
-            target_info[key] = value/sum_result
         return target_info
 

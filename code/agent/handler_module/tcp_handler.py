@@ -16,6 +16,6 @@ class TcpHandler(BaseHandler):
         #TODO
         pass
 
-    def handle_data(self, params):
+    def handle_data(self, modules, data):
         #TODO
         pass
