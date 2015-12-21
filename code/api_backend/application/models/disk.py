@@ -1,9 +1,6 @@
 #-*- coding: UTF-8 -*- 
 
-from bson.objectid import ObjectId
 from bson.json_util import dumps
-from datetime import datetime
-from pymongo.errors import *
 
 from . import db
 
@@ -34,14 +31,18 @@ class DiskModel(object):
     """
     @staticmethod
     def get_disk(mac, begin_date=None, end_date=None):
+        """如果提供时间段,返回时间段内的disk信息
+            否则返回最新信息
+        """
         collection = db["disk"]
         if not begin_date or not end_date:
             return dumps(collection.find({"machine_id": mac},
-                {'_id': False}).sort( [[ "time", -1 ]] ).limit(1)[0])
+                {"_id": False, "machine_id":False}).sort(
+                [["time", -1]]).limit(1)[0])
         return dumps(collection.find({
                 "time": {
                     "$gte": begin_date,
-                    "$lte": end_date    
+                    "$lte": end_date
                 },
                 "machine_id":mac
-            }, {'_id': False}))
+            }, {"_id": False, "machine_id":False}))

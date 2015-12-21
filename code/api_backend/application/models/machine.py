@@ -1,9 +1,6 @@
 #-*- coding: UTF-8 -*- 
 
-from bson.objectid import ObjectId
 from bson.json_util import dumps
-from datetime import datetime
-from pymongo.errors import *
 
 from . import db
 
@@ -13,12 +10,14 @@ class MachineModel(object):
         "_id":"00:00:00:00:00:00",#MAC
         "cluster":`xxx`,
         "ip":"1.1.1.1",
-        "hostname":"XXX"
+        "hostname":"default"
     }
     """
-
     @staticmethod
-    def get_machine(machine_id = None):
+    def get_machine(machine_id=None):
+        """如果提供时间段,返回时间段内的net信息
+            否则返回最新信息
+        """
         collection = db["machine"]
         if machine_id == None:
             return dumps(collection.find({}))
