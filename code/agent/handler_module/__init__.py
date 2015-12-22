@@ -33,7 +33,7 @@ class BaseHandler(object):
         """
         raise NotImplementedError("模块需要定义destroy函数")
 
-    def handle_data(self, params):
+    def handle_data(self, modules, data):
         """
         根据不同处理模块使用不同的方式上报
         如：使用MongoDB

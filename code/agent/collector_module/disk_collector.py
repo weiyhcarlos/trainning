@@ -33,11 +33,11 @@ class DiskCollector(BaseCollector):
 
         return_info = {
                 "t_cap":float(sum(u.total for u in
-                    usage.values()))/(1024*1024*1024),
+                    usage.values())),
                 "t_used":float(sum(u.used for u in
-                    usage.values()))/(1024*1024*1024),
+                    usage.values())),
                 "t_free":float(sum(u.free for u in
-                    usage.values()))/(1024*1024*1024),
+                    usage.values())),
                 "t_read_rate":0.0,
                 "t_write_rate":0.0,
                 "per_disk_info":[]
@@ -46,9 +46,9 @@ class DiskCollector(BaseCollector):
         for disk_name in usage.keys():
             return_info["per_disk_info"].append({
                     "disk_name":disk_name,
-                    "cap":float(usage[disk_name].total)/(1024*1024*1024),
-                    "used":float(usage[disk_name].used)/(1024*1024*1024),
-                    "free":float(usage[disk_name].free)/(1024*1024*1024),
+                    "cap":float(usage[disk_name].total),
+                    "used":float(usage[disk_name].used),
+                    "free":float(usage[disk_name].free),
                     "write_rate":0.0,
                     "read_rate":0.0
                     })
@@ -75,11 +75,11 @@ class DiskCollector(BaseCollector):
                 target_disk_info["read_rate"] = float(
                         current_disk_io[disk_name].read_bytes-
                         self.last_disk_io[disk_name].read_bytes)/(
-                        interval*1024*1024)
+                        interval)
                 target_disk_info["write_rate"] = float(
                         current_disk_io[disk_name].write_bytes-
                         self.last_disk_io[disk_name].write_bytes)/(
-                        interval*1024*1024)
+                        interval)
 
         #根据每个磁盘的速率计算总磁盘速率
         return_info["t_write_rate"] = sum(u["write_rate"] for u in

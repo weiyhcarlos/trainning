@@ -16,7 +16,7 @@ class PrintHandler(BaseHandler):
     def destroy_connection(self):
         pass
 
-    def handle_data(self, params):
+    def handle_data(self, modules, data):
         """打印数据
         参数:
             params: {
@@ -27,7 +27,7 @@ class PrintHandler(BaseHandler):
             如果全部模块上传成功返回:{"status":0,"ret":""}
             否则返回:{"status":1, "ret":相应错误信息}
         """
-        print json.dumps(params["data"], indent=4, sort_keys=True)
+        print json.dumps(data, indent=4, sort_keys=True)
         return {
             "status":0,
             "ret":""

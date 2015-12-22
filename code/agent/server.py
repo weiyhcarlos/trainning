@@ -29,7 +29,7 @@ class Server:
             self.tcp_sock.bind(('', self.port))
             self.tcp_sock.listen(5)
             self.tcp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            while(True):
+            while True:
                 global global_vars
                 sock, addr = self.tcp_sock.accept()
                 str = sock.recv(BUF_SIZE)

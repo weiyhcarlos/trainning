@@ -41,13 +41,11 @@ class MongodbHandler(BaseHandler):
     def destroy_connection(self):
         self.client.close()
 
-    def handle_data(self, params):
+    def handle_data(self, modules, data):
         """上报mongodb方法
         参数:
-            params: {
-                "modules":["cpu","net","average_load","disk","net"],
-                "data":收集的机器信息
-            }
+            modules:["cpu","net","average_load","disk","net"],
+            data:收集的机器信息
         返回:
             如果全部模块上传成功返回:{"status":0,"ret":""}
             否则返回:{"status":1, "ret":相应错误信息}
@@ -62,8 +60,6 @@ class MongodbHandler(BaseHandler):
             }
         #检查有无残留本地数据
         self.check_local_data()
-        modules = params["modules"]
-        data = params["data"]
         if not modules:
             return {
                 "status":1,
@@ -97,9 +93,9 @@ class MongodbHandler(BaseHandler):
             #第一次收集net信息时为空,跳过该模块处理
             if not data[module]:
                 continue
+            data[module]["time"] = data["time"]
+            data[module]["machine_id"] = data["mac"]
             try:
-                data[module]["time"] = data["time"]
-                data[module]["machine_id"] = data["mac"]
                 self.database[module].insert_one(data[module])
             except PyMongoError:
                 self.store_local(module, data[module])
