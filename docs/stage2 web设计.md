@@ -1,28 +1,26 @@
-﻿# stage2 web设计
+# stage2 web设计
 
-标签（空格分隔）： SA-DEV
-
----
 ## 一.使用技术
 后端:Flask提供Restful API  
 前端:angularJS, bootstrap  
 
-    Flask开发依赖:  
+    Flask开发依赖:
     flask  
-    flask-restful  
-    pymongo  
-    uwsgi  
-    //redis  
+    flask-restful
+    pymongo
+    uwsgi
+    //redis
 部署:  
 前端(nginx+angularJS)  
-       后端(nginx+uwsgi+flask)  
+后端(nginx+uwsgi+flask)
 
 ## 二.规范
 [flask pocoo风格][1]  
 [HTTP status code][2]  
-命名:  
-module_name, package_name, ClassName, method_name, ExceptionName, function_name, GLOBAL_VAR_NAME, instance_var_name, function_parameter_name, local_var_name.
-
+python命名:  
+module_name, package_name, ClassName, method_name, ExceptionName, function_name, GLOBAL_VAR_NAME, instance_var_name, function_parameter_name, local_var_name.  
+JS命名:  
+functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeThis, methodNamesLikeThis, 和 SYMBOLIC_CONSTANTS_LIKE_THIS.
 
 ## 三.数据库设计
     machine集合:
@@ -72,6 +70,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
         "machine_id":"00:00:00:00:00:00",#MAC
         "time":"2013-09-18 11:16:32"
         "t_cap":100,
+        "t_used":100,
         "t_free":100,
         "t_read_rate":100,
         "t_write_rate":100,
@@ -79,6 +78,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
             {
                 "disk_name":"sda1",
                 "cap":1000,
+                "used":100,
                 "free":100,
                 "read_rate":1,
                 "write_rate":1,
@@ -131,7 +131,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
         Status: 200 OK
         [
                 {
-                    "MAC":"00:00:00:00:00:00",
+                    "mac":"00:00:00:00:00:00",
                     "cluster":`xxx`,
                     "ip":"1.1.1.1",
                     "hostname":"XXX",
@@ -145,7 +145,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
 
 
 + `/monitor/api/machines/:id`  
- 说明:返回指定ID机器的最新收集信息  
+说明:返回指定ID机器的最新收集信息  
 请求方法: GET  
 请求参数:  
 无  
@@ -222,17 +222,17 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
                 "time": "2013-09-18 11:16:32",
                 "w1_avg": 0.22, 
                 "w2_avg": 0.44, 
-                "w3_avg": 0.53            
+                "w3_avg": 0.53    
             }
         }
-    响应数据(失败):  
+    响应数据(失败):
     
         Status: 400
         {
             "message":"invalid machine id"
         }
     
-+ `/monitor/api/machines/:id/search?module=&start_time=&end_time=`  
++ `/monitor/api/machines/:id/search?module=&begin_date=&end_date=`  
  说明:根据所选时间段返回指定ID机器的CPU信息  
 请求方法: GET  
 请求参数:  
@@ -240,7 +240,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
     start_time:开始时间段 -- 必须  
     end_time:结束时间段 -- 必须  
 响应数据(成功):  
-1.module=cpu:
+1.module=cpu:  
 
         Status: 200 OK
         [
@@ -260,7 +260,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
             ...
         ]
     
-    2.module=meomory:
+    2.module=memory:
 
         Status: 200 OK
         [
@@ -287,6 +287,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
             {
                 "time":"2013-09-18 11:16:32",
                 "t_cap":100,
+                "t_used":100,
                 "t_free":100,
                 "t_read_rate":100,
                 "t_write_rate":100,
@@ -294,6 +295,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
                     {
                     "disk_name":"sda1",
                     "cap":1000,
+                    "used":100,
                     "free":100,
                     "read_rate":1,
                     "write_rate":1,
@@ -342,7 +344,7 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
             },
             ...
         ]
-响应数据(失败):  
+响应数据(失败):
 
         Status:400
         参数提供个数不正确时:
@@ -359,35 +361,50 @@ module_name, package_name, ClassName, method_name, ExceptionName, function_name,
         }
         
 ## 五.前端设计
-### 原型设计
-暂无
+### 页面设计
++ index
+    + topbar
+    + detail
+        + 侧边栏 和 选择栏
+        + 图表页
+            + base info 页面    
+            + average load 页面
+            + cpu 页面
+            + disk rate 页面
+            + disk usage 页面
+            + memory 页面
+            + net 页面
 
-### 前端JS模块
-#### **router（启动app）**
+
+### angularJS模块
+#### **router**
 > 路由 (ui-router)
-
 #### **controllers**
->+ MainController
+>+ TopController  
 机器选择,实时更新及查找条件处理
-+ AverageLoadController
-机器负载趋势图更新处理
-+ CpuController
-Cpu使用率圆饼图更新处理
-+ DiskController
-磁盘使用直方图,磁盘读写速率趋势图处理
-+ NetController
-网卡速率趋势图处理
-+ MemoryController
-内存使用圆饼图更新处理
++ BaseController  
+机器基本信息展示
++ AverageLoadController  
+机器负载 line chart 实时展示,查找展示
++ CpuController  
+Cpu使用率 bar chart 实时展示,查找展示
++ DiskRateController  
+磁盘读写速率 area chart 实时展示,查找展示
++ DiskUsageController  
+磁盘使用 line chart 实时展示,查找展示
++ NetController  
+网卡读写速率 area chart 实时展示,查找展示
++ MemoryController  
+内存使用 bar chart 实时展示,查找展示
 
 #### **directives**
 > 自定义指令
-
 #### **filters**
 > 自定义过滤器
-
 #### **services**
-> 数据请求等
+> 数据请求service, 图表value
+
+
 
   [1]: http://docs.jinkan.org/docs/flask/styleguide.html
   [2]: http://www.restapitutorial.com/httpstatuscodes.html
