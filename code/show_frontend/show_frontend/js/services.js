@@ -429,7 +429,7 @@ angular.module('MachineInfo.services', [])
     //定义后台数据交互服务
     .service('dataFactory', ['$http', function($http) {
         //数据api url
-        var urlBase = "http://test.com:8888";
+        var urlBase = "http://123.58.165.132:8888";
 
         // 获取机器信息列表 
         this.getMachines = function() {
