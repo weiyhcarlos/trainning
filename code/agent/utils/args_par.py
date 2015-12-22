@@ -67,9 +67,6 @@ class ArgsParse(Tools):
         Return: if self.isExisted == 0 then exit() else return dict{"modules":dict,"ttl":int}
         """
         ret = {}
-        # print self.args.version
-        # if self.args.help:
-        #    sys.exit(0)
         if self.args.version:
             print "agent current version is %s" % self.version
             sys.exit(0)
@@ -77,14 +74,9 @@ class ArgsParse(Tools):
             ret["modules"] = self.args.modules
         if self.args.ttl is not None:
             ret["ttl"] = self.args.ttl
-        # print json.dumps(ret)
         if self.is_existed == 0 and len(ret) > 0:
             print json.dumps(ret)
             print self.tcpConnect(json.dumps(ret))
             sys.exit(0)
         else:
             return ret
-
-
-if __name__ == '__main__':
-    obj = ArgsParse({"isExisted": 0, "version": '1.0'})

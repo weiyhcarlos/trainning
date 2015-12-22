@@ -26,10 +26,7 @@ class CheckInstance(Tools):
         child = subprocess.Popen(
             "ps -ef | grep agent.py | wc -l", shell=True, stdout=subprocess.PIPE)
         child.wait()
-        #for line in child.stdout.readlines():
-        #    print line
         num = string.atoi(child.stdout.read())
-        #print "check_ins num:%d" % num
         if num > 3:
             ret['status'] = 0
             return ret
