@@ -379,6 +379,7 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
 ### angularJS模块
 #### **router**
 > 路由 (ui-router)
+
 #### **controllers**
 >+ TopController  
 机器选择,实时更新及查找条件处理
@@ -399,10 +400,13 @@ Cpu使用率 bar chart 实时展示,查找展示
 
 #### **directives**
 > 自定义指令
+
 #### **filters**
 > 自定义过滤器
+
 #### **services**
 > 数据请求service, 图表value
+
 
 
 
