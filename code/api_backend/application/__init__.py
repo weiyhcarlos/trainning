@@ -4,6 +4,7 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse, abort
 import socket
 import os
+from flask.ext.cors import CORS
 
 from .resourses.machines_resources import *
 
@@ -12,6 +13,7 @@ import config
 app = Flask(__name__)
 # app.config['BUNDLE_ERRORS'] = True
 api = Api(app)
+CORS(app)
 
 #@app.route('/')
 #def hello():
