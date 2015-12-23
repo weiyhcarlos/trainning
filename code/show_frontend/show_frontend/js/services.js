@@ -320,11 +320,11 @@ angular.module('MachineInfo.services', [])
                     readPoint[readPoint.length - 1].x)) {
                 readPoint.push({
                     x: data["time"],
-                    y: (data["t_read_rate"]/(1024*1024)).toFixed(3)
+                    y: (data["t_read_rate"]/1024).toFixed(3)
                 });
                 writePoint.push({
                     x: data["time"],
-                    y: (data["t_write_rate"]/(1024*1024)).toFixed(3)
+                    y: (data["t_write_rate"]/1024).toFixed(3)
                 });
                 if (readPoint.length > this.graphWidth) {
                     readPoint.shift();
@@ -341,11 +341,11 @@ angular.module('MachineInfo.services', [])
             for (var i = 0; i < data.length; i++) {
                 readPoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_read_rate"]/(1024*1024)).toFixed(3)
+                    y: (data[i]["t_read_rate"]/1024).toFixed(3)
                 });
                 writePoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_write_rate"]/(1024*1024)).toFixed(3)
+                    y: (data[i]["t_write_rate"]/1024).toFixed(3)
                 });
             }
         },
