@@ -17,3 +17,4 @@ env_default("MONGO_PORT", 32774)
 env_default("MONGO_DATABASE", "machine_test")
 
 env_default("DEBUG", True)
+env_default("CONNECT", False)
