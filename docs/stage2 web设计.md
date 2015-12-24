@@ -11,8 +11,8 @@
     uwsgi
     //redis
 部署:  
-前端(nginx+angularJS)  (http://123.58.165.133/)
-后端(nginx+uwsgi+flask) (http://123.58.165.132:8888/)
+前端(nginx+angularJS)  (http://123.58.165.133/)  
+后端(nginx+uwsgi+flask) (http://123.58.165.132:8888/)  
 
 ## 二.规范
 [flask pocoo风格][1]  
