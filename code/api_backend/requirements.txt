@@ -1,5 +1,0 @@
-flask  
-flask-restful
-pymongo
-uwsgi
-flask-cors
