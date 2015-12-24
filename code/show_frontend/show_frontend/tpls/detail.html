@@ -18,12 +18,32 @@
             <button ng-click="setRealTime()" class="btn btn-default">实时</button>
         </div>
     </div>
+    <div class="row" ng-controller="BaseController">
+        <table st-table="[stateValue.selectedMachine]" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>mac</th>
+                    <th>ip</th>
+                    <th>hostname</th>
+                    <th>cluster</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in [stateValue.selectedMachine]">
+                    <td>{{row.mac}}</td>
+                    <td>{{row.ip}}</td>
+                    <td>{{row.hostname}}</td>
+                    <td>{{row.cluster}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="row">
         <div class="col-md-3" style="margin-top:20px">
             <div class="row">
                 <div class="col-md-12">
                     <div class="list-group">
-                        <a ui-sref="index" class="list-group-item">基础信息</a>
+                        <!-- <a ui-sref="index" class="list-group-item">基础信息</a> -->
                         <a ui-sref="index.cpu" class="list-group-item">CPU比率</a>
                         <a ui-sref="index.memory" class="list-group-item">内存使用</a>
                         <a ui-sref="index.average_load" class="list-group-item">平均负载</a>
@@ -36,29 +56,6 @@
         </div>
         <div class="col-md-9">
             <div ui-view>
-                <div ng-controller="BaseController">
-                    <h3 class="page-header">
-        Machine Base Info:
-    </h3>
-                    <table st-table="[stateValue.selectedMachine]" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>mac</th>
-                                <th>ip</th>
-                                <th>hostname</th>
-                                <th>cluster</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="row in [stateValue.selectedMachine]">
-                                <td>{{row.mac}}</td>
-                                <td>{{row.ip}}</td>
-                                <td>{{row.hostname}}</td>
-                                <td>{{row.cluster}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
