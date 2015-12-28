@@ -1,24 +1,45 @@
 /**
  * 控制器模块,定义各页面逻辑
  */
-angular.module('MachineInfo', ['angular-echarts', 'smart-table',
-    'MachineInfo.services'])
+angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'ui.bootstrap',
+        'MachineInfo.services'
+    ])
     // 控制全局按钮及信息处理
-    .controller('TopController', function($scope, $interval, $state, 
+    .controller('TopController', function($scope, $interval, $state,
         stateValue, dataFactory, cpuInfo, memoryInfo, averageLoadInfo, netInfo) {
         // 当查询日期没有初始化时进行初始化,否则沿用上次使用的值
         if (!stateValue.end_date) {
             var date = new Date();
             stateValue.end_date = new Date(date.getFullYear(), date.getMonth(),
                     date.getDate(), date.getHours(), date.getMinutes()),
-            stateValue.begin_date = new Date(date.getFullYear(), date.getMonth(),
+                stateValue.begin_date = new Date(date.getFullYear(), date.getMonth(),
                     date.getDate(), date.getHours(), date.getMinutes() - 1)
         }
 
+        $scope.alerts = [];
+
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        };
+
         // 查询按钮及实时按钮.触发相应值供子页面控制器监听
         $scope.setSearch = function() {
-            stateValue.operatorCount++;
-            stateValue.realTime = false;
+            var timeDiff =
+                stateValue.end_date.getTime() - stateValue.begin_date.getTime();
+            if (timeDiff <= 1000 * 3600 && timeDiff > 0) {
+                stateValue.operatorCount++;
+                stateValue.realTime = false;
+            } else if (timeDiff <= 0) {
+                $scope.alerts.push({
+                    type: "success",
+                    msg: "开始时间晚于结束时间"
+                });
+            } else {
+                $scope.alerts.push({
+                    type: "success",
+                    msg: "请选择不多于一个小时的查询时间段"
+                });
+            }
         }
         $scope.setRealTime = function() {
             stateValue.operatorCount++;
@@ -49,7 +70,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                     stateValue.selectedMachine = machines[0];
                 else {
                     stateValue.selectedMachine =
-                        internalObjectFromArray(machines, 
+                        internalObjectFromArray(machines,
                             stateValue.selectedMachine);
                 }
             });
@@ -76,7 +97,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                         $scope.barMultiple = Object.keys(cpuInfo.percentage).map(
                             function(key) {
                                 return cpuInfo.percentage[key];
-                        });
+                            });
                     });
             }, 3000);
         }
@@ -91,7 +112,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                 $scope.barMultiple = Object.keys(cpuInfo.percentage).map(
                     function(key) {
                         return cpuInfo.percentage[key];
-                });
+                    });
             } else {
                 // 触发查询时,请求数据并reload 当前state
                 if (stateValue.realTime == false) {
@@ -105,23 +126,23 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                                 $scope.barMultiple = Object.keys(cpuInfo.percentage).map(
                                     function(key) {
                                         return cpuInfo.percentage[key];
-                                });
+                                    });
 
                             });
                     }
-                // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
+                    // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     cpuInfo.clear();
-                    if (newValue == 0)
+                    if (newValue == 0) {
                         currentInterval = updateData($interval);
-                    else {
+                    } else {
                         stateValue.operatorCount = 0;
                         $state.reload();
                     }
                 }
             }
         });
-        
+
         // 当离开当前state时, 停止interval
         $scope.$on("$destroy", function(event) {
             $interval.cancel(currentInterval);
@@ -147,7 +168,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                     .success(function(machine) {
                         averageLoadInfo.load(machine.average_load);
                         $scope.lineMultiple = [averageLoadInfo.w1Avg,
-                        averageLoadInfo.w2Avg, averageLoadInfo.w3Avg];
+                            averageLoadInfo.w2Avg, averageLoadInfo.w3Avg
+                        ];
                     });
             }, 3000);
         }
@@ -160,7 +182,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
             // 代表保留上次结果, 用已有的cpuInfo赋值,跳过处理
             if (newValue != 0 && angular.equals(newValue, oldValue)) {
                 $scope.lineMultiple = [averageLoadInfo.w1Avg,
-                averageLoadInfo.w2Avg, averageLoadInfo.w3Avg];
+                    averageLoadInfo.w2Avg, averageLoadInfo.w3Avg
+                ];
             } else {
                 // 触发查询时,请求数据并reload 当前state
                 if (stateValue.realTime == false) {
@@ -172,10 +195,11 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                                 averageLoadInfo.reInit(data);
                                 $state.reload();
                                 $scope.lineMultiple = [averageLoadInfo.w1Avg,
-                                averageLoadInfo.w2Avg, averageLoadInfo.w3Avg];
+                                    averageLoadInfo.w2Avg, averageLoadInfo.w3Avg
+                                ];
                             });
                     }
-                // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
+                    // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     averageLoadInfo.clear();
                     if (newValue == 0)
@@ -234,7 +258,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                                 $scope.areaMultiple = [diskRate.sentRate, diskRate.recvRate];
                             });
                     }
-                // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
+                    // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     diskRate.clear();
                     if (newValue == 0)
@@ -270,7 +294,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                     .success(function(machine) {
                         diskUsage.load(machine.disk);
                         $scope.lineMultiple = [diskUsage.total, diskUsage.used,
-                            diskUsage.free];
+                            diskUsage.free
+                        ];
                     });
             }, 3000);
         }
@@ -294,10 +319,11 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                                 diskUsage.reInit(data);
                                 $state.reload();
                                 $scope.lineMultiple = [diskUsage.total, diskUsage.used,
-                                    diskUsage.free];
+                                    diskUsage.free
+                                ];
                             });
                     }
-                // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
+                    // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     diskUsage.clear();
                     if (newValue == 0)
@@ -356,7 +382,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                                 $scope.areaMultiple = [netInfo.sentRate, netInfo.recvRate];
                             });
                     }
-                // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
+                    // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     netInfo.clear();
                     if (newValue == 0)
@@ -391,7 +417,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                         $scope.barMultiple = Object.keys(memoryInfo.usage).map(
                             function(key) {
                                 return memoryInfo.usage[key];
-                        });
+                            });
                     });
             }, 3000);
         }
@@ -419,10 +445,10 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
                                 $scope.barMultiple = Object.keys(memoryInfo.usage).map(
                                     function(key) {
                                         return memoryInfo.usage[key];
-                                });
+                                    });
                             });
                     }
-                // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
+                    // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     memoryInfo.clear();
                     if (newValue == 0)

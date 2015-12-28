@@ -2,7 +2,8 @@
  * 路由模块,启动app,加载所需模块
  */
  
-var routerApp = angular.module('routerApp', ['ui.router', 'ngAnimate', 'ui.bootstrap', 'angularjs-dropdown-multiselect',
+var routerApp = angular.module('routerApp', ['ui.router', 
+    'angularjs-dropdown-multiselect', 
     'MachineInfo.services', 'MachineInfo.directives', 'MachineInfo'
 ]);
 
