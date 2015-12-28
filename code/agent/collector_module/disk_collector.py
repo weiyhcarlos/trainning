@@ -63,6 +63,8 @@ class DiskCollector(BaseCollector):
         current_disk_io = psutil.disk_io_counters(perdisk=True)
         interval = (datetime.now() - self.last_disk_time).seconds
 
+        if interval == 0:
+            return return_info
 
         #根据上次缓存值计算相应速率,转为MB/S
         for disk_name in current_disk_io.keys():

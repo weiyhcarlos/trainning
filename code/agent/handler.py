@@ -9,18 +9,18 @@ class Handler(object):
     属性:
         handler_instance: 子处理模块实例(维持连接)
     """
-    def __init__(self, params_dict):
+    def __init__(self, method, config):
         """初始化处理类
         参数:
-            params_dict:{"method":方法名, "config":配置dict}
+            method:方法名
+            config:配置dict
         返回:
             无
         """
-        method_name = params_dict["method"]
         self.handler_instance = str_to_class(
-                    "handler_module."+method_name+"_handler",
-                    "".join([m.capitalize() for m in method_name.split("_")])
-                    +"Handler", params_dict["config"])
+                    "handler_module."+method+"_handler",
+                    "".join([m.capitalize() for m in method.split("_")])
+                    +"Handler", config)
 
     def set_handler(self, method, config):
         """更换子处理模块

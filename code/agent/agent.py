@@ -99,7 +99,8 @@ def main():
         if "ttl" in paras.keys():
             global_vars["ttl"] = paras['ttl']
         col_obj = Collector(global_vars["modules"])
-        hand_obj = Handler(global_vars["Handler"])
+        hand_obj = Handler(global_vars["Handler"]["method"],
+                global_vars["Handler"]["config"])
         global_vars["collectObj"] = col_obj
         global_vars['handlerObj'] = hand_obj
         log_init(global_vars["logPath"])  # log file

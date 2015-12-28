@@ -36,6 +36,10 @@ class NetCollector(BaseCollector):
         current_net_info = psutil.net_io_counters(pernic=True)
         interval = (datetime.now()-self.last_net_time).seconds
 
+        if interval == 0:
+            return {}
+
+
         #根据上次缓存值计算相应速率,转为KB/S
         for name in current_net_info.keys():
             #过滤回环以及docker的网卡
