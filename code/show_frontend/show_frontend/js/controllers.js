@@ -88,11 +88,13 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             // debug: true,
             stack: true
         };
-
+        $scope.isLoading = false;
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
+                        if($scope.isLoading)
+                            $scope.isLoading = false;
                         cpuInfo.load(machine.cpu);
                         $scope.barMultiple = Object.keys(cpuInfo.percentage).map(
                             function(key) {
@@ -134,6 +136,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                 } else {
                     cpuInfo.clear();
                     if (newValue == 0) {
+                        $scope.isLoading = true;
                         currentInterval = updateData($interval);
                     } else {
                         stateValue.operatorCount = 0;
@@ -161,11 +164,13 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             showLegend: true,
             stack: false
         };
-
+        $scope.isLoading = false;
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
+                        if($scope.isLoading)
+                            $scope.isLoading = false;
                         averageLoadInfo.load(machine.average_load);
                         $scope.lineMultiple = [averageLoadInfo.w1Avg,
                             averageLoadInfo.w2Avg, averageLoadInfo.w3Avg
@@ -202,8 +207,10 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     averageLoadInfo.clear();
-                    if (newValue == 0)
+                    if (newValue == 0) {
+                        $scope.isLoading = true;
                         currentInterval = updateData($interval);
+                    }
                     else {
                         stateValue.operatorCount = 0;
                         $state.reload();
@@ -226,11 +233,13 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             debug: true,
             stack: true
         };
-
+        $scope.isLoading = false;
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
+                        if($scope.isLoading)
+                            $scope.isLoading = false;
                         diskRate.load(machine.disk);
                         $scope.areaMultiple = [diskRate.readRate, diskRate.writeRate];
                     });
@@ -261,8 +270,10 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     diskRate.clear();
-                    if (newValue == 0)
+                    if (newValue == 0) {
+                        $scope.isLoading = true;
                         currentInterval = updateData($interval);
+                    }
                     else {
                         stateValue.operatorCount = 0;
                         $state.reload();
@@ -292,6 +303,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
+                        if($scope.isLoading)
+                            $scope.isLoading = false;
                         diskUsage.load(machine.disk);
                         $scope.lineMultiple = [diskUsage.total, diskUsage.used,
                             diskUsage.free
@@ -326,8 +339,10 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     diskUsage.clear();
-                    if (newValue == 0)
+                    if (newValue == 0) {
+                        $scope.isLoading = true;
                         currentInterval = updateData($interval);
+                    }
                     else {
                         stateValue.operatorCount = 0;
                         $state.reload();
@@ -350,11 +365,13 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             debug: true,
             stack: true
         };
-
+        $scope.isLoading = false;
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
+                        if($scope.isLoading)
+                            $scope.isLoading = false;
                         netInfo.load(machine.net);
                         $scope.areaMultiple = [netInfo.sentRate, netInfo.recvRate];
                     });
@@ -385,9 +402,10 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     netInfo.clear();
-                    if (newValue == 0)
+                    if (newValue == 0) {
+                        $scope.isLoading = true;
                         currentInterval = updateData($interval);
-                    else {
+                    } else {
                         stateValue.operatorCount = 0;
                         $state.reload();
                     }
@@ -408,11 +426,13 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             debug: true,
             stack: true
         };
-
+        $scope.isLoading = false;
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
+                        if($scope.isLoading)
+                            $scope.isLoading = false;
                         memoryInfo.load(machine.memory);
                         $scope.barMultiple = Object.keys(memoryInfo.usage).map(
                             function(key) {
@@ -451,8 +471,10 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     // 触发实时时,清空遗留数据. 如果判断为用户触发按钮, reload 当前 state
                 } else {
                     memoryInfo.clear();
-                    if (newValue == 0)
+                    if (newValue == 0) {
+                        $scope.isLoading = true;
                         currentInterval = updateData($interval);
+                    }
                     else {
                         stateValue.operatorCount = 0;
                         $state.reload();
