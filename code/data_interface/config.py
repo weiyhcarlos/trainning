@@ -1,0 +1,16 @@
+#-*- coding: UTF-8 -*-
+
+MONGO_HOST = "123.58.165.133"
+MONGO_PORT = 32774
+MONGO_DATABASE = "machine_test_1"
+
+APP_HOST = "0.0.0.0"
+APP_PORT = 4567
+
+DEBUG = True
+CONNECT = False
+
+CELERY_BROKER_URL = "redis://123.58.165.132:6379"
+CELERY_RESULT_BACKEND = "redis://123.58.165.132:6379"
+
+INSTALLED_APPS=("web.upload_to_mongodb")
