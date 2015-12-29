@@ -1,8 +1,8 @@
 /**
  * 控制器模块,定义各页面逻辑
  */
-angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'ui.bootstrap',
-        'MachineInfo.services'
+angular.module('MachineInfo', ['angular-echarts', 'smart-table',
+        'ngAnimate', 'ui.bootstrap', 'MachineInfo.services'
     ])
     // 控制全局按钮及信息处理
     .controller('TopController', function($scope, $interval, $state,
@@ -89,11 +89,12 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             stack: true
         };
         $scope.isLoading = false;
+
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
-                        if($scope.isLoading)
+                        if ($scope.isLoading)
                             $scope.isLoading = false;
                         cpuInfo.load(machine.cpu);
                         $scope.barMultiple = Object.keys(cpuInfo.percentage).map(
@@ -108,7 +109,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
         $scope.$watch(function() {
             return stateValue.operatorCount;
         }, function(newValue, oldValue) {
-            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件--bug),
+            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件),
             // 代表保留上次结果, 用已有的cpuInfo赋值,跳过处理
             if (newValue != 0 && angular.equals(newValue, oldValue)) {
                 $scope.barMultiple = Object.keys(cpuInfo.percentage).map(
@@ -165,11 +166,12 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             stack: false
         };
         $scope.isLoading = false;
+
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
-                        if($scope.isLoading)
+                        if ($scope.isLoading)
                             $scope.isLoading = false;
                         averageLoadInfo.load(machine.average_load);
                         $scope.lineMultiple = [averageLoadInfo.w1Avg,
@@ -183,7 +185,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
         $scope.$watch(function() {
             return stateValue.operatorCount;
         }, function(newValue, oldValue) {
-            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件--bug),
+            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件),
             // 代表保留上次结果, 用已有的cpuInfo赋值,跳过处理
             if (newValue != 0 && angular.equals(newValue, oldValue)) {
                 $scope.lineMultiple = [averageLoadInfo.w1Avg,
@@ -210,8 +212,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     if (newValue == 0) {
                         $scope.isLoading = true;
                         currentInterval = updateData($interval);
-                    }
-                    else {
+                    } else {
                         stateValue.operatorCount = 0;
                         $state.reload();
                     }
@@ -234,11 +235,12 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             stack: true
         };
         $scope.isLoading = false;
+
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
-                        if($scope.isLoading)
+                        if ($scope.isLoading)
                             $scope.isLoading = false;
                         diskRate.load(machine.disk);
                         $scope.areaMultiple = [diskRate.readRate, diskRate.writeRate];
@@ -250,7 +252,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
         $scope.$watch(function() {
             return stateValue.operatorCount;
         }, function(newValue, oldValue) {
-            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件--bug),
+            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件),
             // 代表保留上次结果, 用已有的cpuInfo赋值,跳过处理
             if (newValue != 0 && angular.equals(newValue, oldValue)) {
                 $scope.areaMultiple = [diskRate.readRate, diskRate.writeRate];
@@ -273,8 +275,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     if (newValue == 0) {
                         $scope.isLoading = true;
                         currentInterval = updateData($interval);
-                    }
-                    else {
+                    } else {
                         stateValue.operatorCount = 0;
                         $state.reload();
                     }
@@ -303,7 +304,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
-                        if($scope.isLoading)
+                        if ($scope.isLoading)
                             $scope.isLoading = false;
                         diskUsage.load(machine.disk);
                         $scope.lineMultiple = [diskUsage.total, diskUsage.used,
@@ -317,7 +318,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
         $scope.$watch(function() {
             return stateValue.operatorCount;
         }, function(newValue, oldValue) {
-            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件--bug),
+            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件),
             // 代表保留上次结果, 用已有的cpuInfo赋值,跳过处理
             if (newValue != 0 && angular.equals(newValue, oldValue)) {
                 $scope.lineMultiple = [diskUsage.total, diskUsage.used, diskUsage.free];
@@ -342,8 +343,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     if (newValue == 0) {
                         $scope.isLoading = true;
                         currentInterval = updateData($interval);
-                    }
-                    else {
+                    } else {
                         stateValue.operatorCount = 0;
                         $state.reload();
                     }
@@ -366,11 +366,12 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             stack: true
         };
         $scope.isLoading = false;
+
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
-                        if($scope.isLoading)
+                        if ($scope.isLoading)
                             $scope.isLoading = false;
                         netInfo.load(machine.net);
                         $scope.areaMultiple = [netInfo.sentRate, netInfo.recvRate];
@@ -382,7 +383,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
         $scope.$watch(function() {
             return stateValue.operatorCount;
         }, function(newValue, oldValue) {
-            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件--bug),
+            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件),
             // 代表保留上次结果, 用已有的cpuInfo赋值,跳过处理
             if (newValue != 0 && angular.equals(newValue, oldValue)) {
                 $scope.areaMultiple = [netInfo.sentRate, netInfo.recvRate];
@@ -427,11 +428,12 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
             stack: true
         };
         $scope.isLoading = false;
+
         function updateData($interval) {
             return $interval(function() {
                 dataFactory.getMachine(stateValue.selectedMachine.url)
                     .success(function(machine) {
-                        if($scope.isLoading)
+                        if ($scope.isLoading)
                             $scope.isLoading = false;
                         memoryInfo.load(machine.memory);
                         $scope.barMultiple = Object.keys(memoryInfo.usage).map(
@@ -446,7 +448,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
         $scope.$watch(function() {
             return stateValue.operatorCount;
         }, function(newValue, oldValue) {
-            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件--bug),
+            // 如果变化的值相同(angularjs 刷新state时 值不变也会触发监听事件),
             // 代表保留上次结果, 用已有的cpuInfo赋值,跳过处理
             if (newValue != 0 && angular.equals(newValue, oldValue)) {
                 $scope.barMultiple = Object.keys(memoryInfo.usage).map(function(key) {
@@ -474,8 +476,7 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table', 'ngAnimate', 'u
                     if (newValue == 0) {
                         $scope.isLoading = true;
                         currentInterval = updateData($interval);
-                    }
-                    else {
+                    } else {
                         stateValue.operatorCount = 0;
                         $state.reload();
                     }
