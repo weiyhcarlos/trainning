@@ -4,7 +4,7 @@
 from flask import Flask, request, jsonify
 from celery import Celery
 from pymongo import MongoClient
-from pymongo.errors import PyMongoError, ConnectionFailure
+from pymongo.errors import PyMongoError
 import json
 
 import config
@@ -31,7 +31,6 @@ app.config.update(
 )
 celery = make_celery(app)
 
-
 client = MongoClient(config.MONGO_HOST, config.MONGO_PORT)
 database = client[config.MONGO_DATABASE]
 
@@ -52,7 +51,7 @@ def upload_to_mongodb(self, modules, data):
     try:
         if not collection.find_one({"_id":machine_info["_id"]}):
             collection.insert_one(machine_info)
-    except PyMongoError:
+    except PyMongoError as exc:
         raise self.retry(exc=exc)
 
 
@@ -70,7 +69,7 @@ def upload_to_mongodb(self, modules, data):
             if not collection.find_one({"machine_id":data["mac"],
                 "time":data["time"]}):
                 collection.insert_one(data[module])
-        except PyMongoError:
+        except PyMongoError as exc:
             raise self.retry(exc=exc)
 
 

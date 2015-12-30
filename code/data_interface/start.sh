@@ -1,3 +1,4 @@
 #!/usr/bin/bash
-celery worker -A web.celery --loglevel=DEBUG &
+cd /var/www/data_interface
+celery worker -A web.celery --loglevel=DEBUG  -f /var/tmp/celery.log &
 python web.py &
