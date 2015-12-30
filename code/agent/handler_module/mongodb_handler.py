@@ -12,16 +12,28 @@ from . import BaseHandler
 class MongodbHandler(BaseHandler):
     """使用MongoDB存储机器信息数据
     属性:
-        local_file: 继承自BaseHandler,本地存放数据路径
+        local_file: 本地存放数据路径
         client: mongodb客户端实例
         database: mongodb数据库实例
     """
     def __init__(self, config):
-        BaseHandler.__init__(self, config)
+        self.local_file = config["localFile"]
         self.client = MongoClient(config['host'], int(config['port']))
         self.database = self.client[config['database']]
 
+    def store_local(self, module, data):
+        """处理数据失败,保存到本地
+        """
+        with open(self.local_file, 'a') as local_file:
+            local_file.write(module+"\t")
+            json.dump(data, local_file)
+            local_file.write("\n")
+
     def check_local_data(self):
+        """
+        每次处理前检查有无本地数据,有则上传并清空
+        需要子类根据不同情况实现上传
+        """
         if (os.path.isfile(self.local_file) and
             os.stat(self.local_file).st_size != 0):
             lines = [line.rstrip('\n') for line in open('local_data')]
@@ -39,6 +51,8 @@ class MongodbHandler(BaseHandler):
                 self.store_local(fail_data[0], fail_data[1])
 
     def destroy_connection(self):
+        """在实例销毁时做连接关闭处理
+        """
         self.client.close()
 
     def handle_data(self, modules, data):

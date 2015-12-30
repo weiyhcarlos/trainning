@@ -10,12 +10,6 @@ from . import BaseHandler
 class PrintHandler(BaseHandler):
     """以可读形式打印机器信息数据
     """
-    def check_local_data(self):
-        pass
-
-    def destroy_connection(self):
-        pass
-
     def handle_data(self, modules, data):
         """打印数据
         参数:
