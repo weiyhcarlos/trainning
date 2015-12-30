@@ -81,15 +81,15 @@ def upload():
         try:
             data = json.loads(request.data)
         except ValueError:
-            return jsonify({"ret":"invalid json data"}), 400
+            return "invalid json data", 400
         try:
             if data["modules"] and data["data"]:
                 upload_to_mongodb.delay(data["modules"], data["data"])
-                return jsonify({"ret":""}), 200
+                return "", 200
         except KeyError:
-            return jsonify({"ret":"incomplete json data"}), 400
+            return "incomplete json data", 400
 
-    return jsonify({"ret":"empty json data"}), 400
+    return "empty json data", 400
 
 if __name__ == '__main__':
     app.run(host=config.APP_HOST, port=config.APP_PORT,

@@ -14,4 +14,4 @@ RUN pip install -r /requirements.txt
 
 EXPOSE 4567
 
-CMD ["sh", "/start.sh"]
+

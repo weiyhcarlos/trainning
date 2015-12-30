@@ -34,7 +34,7 @@ class HttpHandler(BaseHandler):
         if request_result.status_code != 200:
             return {
                 "status":1,
-                "ret":json.loads(request_result.text)["ret"]
+                "ret":request_result.text
             }
         else:
             return {
