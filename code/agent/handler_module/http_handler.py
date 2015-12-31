@@ -26,11 +26,18 @@ class HttpHandler(BaseHandler):
             "modules":modules,
             "data":data
         }
-        request_result = requests.post(
-            self.upload_url,
-            data=json.dumps(post_data),
-            headers={'Content-type': 'application/json', 'Accept': 'text/plain'}
-            )
+        try:
+            request_result = requests.post(
+                self.upload_url,
+                data=json.dumps(post_data),
+                headers={'Content-type': 'application/json',
+                    'Accept': 'text/plain'}
+                )
+        except requests.ConnectionError:
+            return {
+                "status":1,
+                "ret":"http Connection fail"
+            }
         if request_result.status_code != 200:
             return {
                 "status":1,
