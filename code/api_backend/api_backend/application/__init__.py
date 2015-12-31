@@ -11,14 +11,9 @@ from .resourses.machines_resources import *
 import config
 
 app = Flask(__name__)
-# app.config['BUNDLE_ERRORS'] = True
+
 api = Api(app)
 CORS(app)
-
-#@app.route('/')
-#def hello():
-#    return 'Hello World! application run successfully
-#         from %s' % (socket.gethostname(), )
 
 api.add_resource(MachinesList, "/monitor/api/machines",
         endpoint="machines_list")
