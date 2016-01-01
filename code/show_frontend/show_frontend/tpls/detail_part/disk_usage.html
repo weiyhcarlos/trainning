@@ -1,0 +1,5 @@
+<h3 class="page-header">Disk Usage    <small>单位:GB</small></h3>
+<div ng-controller="DiskUsageController">
+    <line-chart config="lineConfig" data="lineMultiple"></line-chart>
+    <uib-progressbar class="progress-striped active" value="100" type="info" ng-show="isLoading">dynamic show charts loading</uib-progressbar>
+</div>

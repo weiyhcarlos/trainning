@@ -1,0 +1,5 @@
+<h3 class="page-header">Net Rate <small>单位:KB/s</small></h3>
+<div ng-controller="NetController">
+    <area-chart config="areaConfig" data="areaMultiple"></area-chart>
+    <uib-progressbar class="progress-striped active" value="100" type="info" ng-show="isLoading">dynamic show charts loading</uib-progressbar>
+</div>
