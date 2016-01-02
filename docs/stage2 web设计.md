@@ -367,7 +367,6 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
     + detail
         + 侧边栏 和 选择栏
         + 图表页
-            + base info 页面    
             + average load 页面
             + cpu 页面
             + disk rate 页面
