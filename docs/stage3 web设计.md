@@ -365,15 +365,23 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
 + index
     + topbar
     + detail
-        + 侧边栏 和 选择栏
-        + 图表页
-            + base info 页面    
-            + average load 页面
-            + cpu 页面
-            + disk rate 页面
-            + disk usage 页面
-            + memory 页面
-            + net 页面
+        + 主页
+        + 单机信息页
+            + 侧边栏 和 选择栏
+            + 图表页
+                + average load 页面
+                + cpu 页面
+                + disk rate 页面
+                + disk usage 页面
+                + memory 页面
+                + net 页面
+        + 机器对比页
+            + 侧边栏 和 选择栏
+            + 图表页
+                + average load 页面
+                + disk rate 页面
+                + net 页面
+
 
 
 ### angularJS模块
@@ -381,7 +389,8 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
 > 路由 (ui-router)
 
 #### **controllers**
->+ TopController  
+> 单机信息页：
++ TopController  
 机器选择,实时更新及查找条件处理
 + BaseController  
 机器基本信息展示
@@ -397,6 +406,20 @@ Cpu使用率 bar chart 实时展示,查找展示
 网卡读写速率 area chart 实时展示,查找展示
 + MemoryController  
 内存使用 bar chart 实时展示,查找展示
+
+>机器对比页：
++ TopCompareController  
+机器选择，对比  
++ BaseCompareController  
+机器基本信息展示
++ AverageLoadController  
+机器负载 line chart 对比
++ DiskRateController  
+磁盘读写速率 area chart 对比
++ NetController  
+网卡读写速率 area chart 对比
+
+
 
 #### **directives**
 > 自定义指令
