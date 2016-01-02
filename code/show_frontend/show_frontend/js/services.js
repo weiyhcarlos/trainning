@@ -10,6 +10,12 @@ angular.module('MachineInfo.services', [])
         end_date: null,
         begin_date: null
     })
+    .value('stateValueCompare', {
+        isSearch: false,
+        selectedMachine: [],
+        end_date: null,
+        begin_date: null
+    })
     .value('cpuInfo', {
         percentage: {
             user: {
@@ -147,7 +153,7 @@ angular.module('MachineInfo.services', [])
                     usagePoint = this.usage[key].datapoints;
                     usagePoint.push({
                         x: data["time"],
-                        y: (data[key]/(1024*1024)).toFixed(3)
+                        y: (data[key] / (1024 * 1024)).toFixed(3)
                     });
                     if (usagePoint.length > this.graphWidth)
                         usagePoint.shift();
@@ -165,7 +171,7 @@ angular.module('MachineInfo.services', [])
                     usagePoint = this.usage[key].datapoints;
                     usagePoint.push({
                         x: data[i]["time"],
-                        y: (data[i][key]/(1024*1024)).toFixed(3)
+                        y: (data[i][key] / (1024 * 1024)).toFixed(3)
                     });
                 }
             }
@@ -247,6 +253,54 @@ angular.module('MachineInfo.services', [])
             this.w3Avg.datapoints.length = 0;
         }
     })
+    .value('averageLoadCompareInfo', {
+        w1Avg: [],
+        w2Avg: [],
+        w3Avg: [],
+        append: function(machine, data) {
+            this.w1Avg.push({
+                name: machine,
+                datapoints: []
+            });
+            this.w2Avg.push({
+                name: machine,
+                datapoints: []
+            });
+            this.w3Avg.push({
+                name: machine,
+                datapoints: []
+            });
+            w1Point = this.w1Avg[this.w1Avg.length - 1].datapoints;
+            w2Point = this.w2Avg[this.w2Avg.length - 1].datapoints;
+            w3Point = this.w3Avg[this.w3Avg.length - 1].datapoints;
+            for (var i = 0; i < data.length; i++) {
+                w1Point.push({
+                    x: data[i]["time"],
+                    y: data[i]["w1_avg"]
+                });
+                w2Point.push({
+                    x: data[i]["time"],
+                    y: data[i]["w2_avg"]
+                });
+                w3Point.push({
+                    x: data[i]["time"],
+                    y: data[i]["w3_avg"]
+                });
+            }
+        },
+        clear: function() {
+            this.w1Avg = [];
+            this.w2Avg = [];
+            this.w3Avg = [];
+        },
+        empty: function() {
+            if (this.w1Avg.length == 0 && this.w2Avg.length == 0 &&
+                this.w3Avg.length == 0) {
+                return true;
+            }
+            return false;
+        }
+    })
     .value('netInfo', {
         sentRate: {
             name: "sent rate",
@@ -266,11 +320,11 @@ angular.module('MachineInfo.services', [])
                     sentPoint[sentPoint.length - 1].x)) {
                 sentPoint.push({
                     x: data["time"],
-                    y: (data["t_sent_rate"]/1024).toFixed(3)
+                    y: (data["t_sent_rate"] / 1024).toFixed(3)
                 });
                 recvPoint.push({
                     x: data["time"],
-                    y: (data["t_recv_rate"]/1024).toFixed(3)
+                    y: (data["t_recv_rate"] / 1024).toFixed(3)
                 });
                 if (sentPoint.length > this.graphWidth) {
                     sentPoint.shift();
@@ -287,11 +341,11 @@ angular.module('MachineInfo.services', [])
             for (var i = 0; i < data.length; i++) {
                 sentPoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_sent_rate"]/1024).toFixed(3)
+                    y: (data[i]["t_sent_rate"] / 1024).toFixed(3)
                 });
                 recvPoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_recv_rate"]/1024).toFixed(3)
+                    y: (data[i]["t_recv_rate"] / 1024).toFixed(3)
                 });
             }
         },
@@ -299,6 +353,42 @@ angular.module('MachineInfo.services', [])
         clear: function() {
             this.sentRate.datapoints.length = 0;
             this.recvRate.datapoints.length = 0;
+        }
+    })
+    .value('netCompareInfo', {
+        sentRate: [],
+        recvRate: [],
+        append: function(machine, data) {
+            this.sentRate.push({
+                name: machine,
+                datapoints: []
+            });
+            this.recvRate.push({
+                name: machine,
+                datapoints: []
+            });
+            readPoint = this.sentRate[this.sentRate.length - 1].datapoints;
+            writePoint = this.recvRate[this.recvRate.length - 1].datapoints;
+            for (var i = 0; i < data.length; i++) {
+                readPoint.push({
+                    x: data[i]["time"],
+                    y: data[i]["t_sent_rate"]
+                });
+                writePoint.push({
+                    x: data[i]["time"],
+                    y: data[i]["t_recv_rate"]
+                });
+            }
+        },
+        clear: function() {
+            this.sentRate = [];
+            this.recvRate = [];
+        },
+        empty: function() {
+            if (this.sentRate.length == 0 && this.recvRate.length == 0) {
+                return true;
+            }
+            return false;
         }
     })
     .value('diskRate', {
@@ -320,11 +410,11 @@ angular.module('MachineInfo.services', [])
                     readPoint[readPoint.length - 1].x)) {
                 readPoint.push({
                     x: data["time"],
-                    y: (data["t_read_rate"]/1024).toFixed(3)
+                    y: (data["t_read_rate"] / 1024).toFixed(3)
                 });
                 writePoint.push({
                     x: data["time"],
-                    y: (data["t_write_rate"]/1024).toFixed(3)
+                    y: (data["t_write_rate"] / 1024).toFixed(3)
                 });
                 if (readPoint.length > this.graphWidth) {
                     readPoint.shift();
@@ -341,11 +431,11 @@ angular.module('MachineInfo.services', [])
             for (var i = 0; i < data.length; i++) {
                 readPoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_read_rate"]/1024).toFixed(3)
+                    y: (data[i]["t_read_rate"] / 1024).toFixed(3)
                 });
                 writePoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_write_rate"]/1024).toFixed(3)
+                    y: (data[i]["t_write_rate"] / 1024).toFixed(3)
                 });
             }
         },
@@ -353,6 +443,42 @@ angular.module('MachineInfo.services', [])
         clear: function() {
             this.readRate.datapoints.length = 0;
             this.writeRate.datapoints.length = 0;
+        }
+    })
+    .value('diskRateCompare', {
+        readRate: [],
+        writeRate: [],
+        append: function(machine, data) {
+            this.readRate.push({
+                name: machine,
+                datapoints: []
+            });
+            this.writeRate.push({
+                name: machine,
+                datapoints: []
+            });
+            readPoint = this.readRate[this.readRate.length - 1].datapoints;
+            writePoint = this.writeRate[this.writeRate.length - 1].datapoints;
+            for (var i = 0; i < data.length; i++) {
+                readPoint.push({
+                    x: data[i]["time"],
+                    y: data[i]["t_read_rate"]
+                });
+                writePoint.push({
+                    x: data[i]["time"],
+                    y: data[i]["t_write_rate"]
+                });
+            }
+        },
+        clear: function() {
+            this.readRate = [];
+            this.writeRate = [];
+        },
+        empty: function() {
+            if (this.readRate.length == 0 && this.writeRate.length == 0) {
+                return true;
+            }
+            return false;
         }
     })
     .value('diskUsage', {
@@ -379,15 +505,15 @@ angular.module('MachineInfo.services', [])
                     totalPoint[totalPoint.length - 1].x)) {
                 totalPoint.push({
                     x: data["time"],
-                    y: (data["t_cap"]/(1024*1024*1024)).toFixed(3)
+                    y: (data["t_cap"] / (1024 * 1024 * 1024)).toFixed(3)
                 });
                 usedPoint.push({
                     x: data["time"],
-                    y: (data["t_used"]/(1024*1024*1024)).toFixed(3)
+                    y: (data["t_used"] / (1024 * 1024 * 1024)).toFixed(3)
                 });
                 freePoint.push({
                     x: data["time"],
-                    y: (data["t_free"]/(1024*1024*1024)).toFixed(3)
+                    y: (data["t_free"] / (1024 * 1024 * 1024)).toFixed(3)
                 });
                 if (totalPoint.length > this.graphWidth) {
                     totalPoint.shift();
@@ -407,15 +533,15 @@ angular.module('MachineInfo.services', [])
             for (var i = 0; i < data.length; i++) {
                 totalPoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_cap"]/(1024*1024*1024)).toFixed(3)
+                    y: (data[i]["t_cap"] / (1024 * 1024 * 1024)).toFixed(3)
                 });
                 usedPoint.push({
                     x: data[i]["time"],
-                    y: (data[i]["t_used"]/(1024*1024*1024)).toFixed(3)
+                    y: (data[i]["t_used"] / (1024 * 1024 * 1024)).toFixed(3)
                 });
                 freePoint.push({
                     x: data[i]["time"],
-                    y: (data["t_free"]/(1024*1024*1024)).toFixed(3)
+                    y: (data["t_free"] / (1024 * 1024 * 1024)).toFixed(3)
                 });
             }
         },
@@ -444,9 +570,10 @@ angular.module('MachineInfo.services', [])
         //获得单个模块指定日期区间的数据
         this.getModule = function(machineUrl, module,
             beginDate, endDate) {
-            targetUrl = urlBase + machineUrl + "/search?module=" + 
-            module + "&begin_date=" + beginDate.format("isoDateTime").replace(/T/g, " ") 
-            + "&end_date=" + endDate.format("isoDateTime").replace(/T/g, " ");
+            targetUrl = urlBase + machineUrl + "/search?module=" +
+                module + "&begin_date=" +
+                beginDate.format("isoDateTime").replace(/T/g, " ") +
+                "&end_date=" + endDate.format("isoDateTime").replace(/T/g, " ");
             return $http.get(targetUrl);
         }
     }]);

@@ -1,7 +1,7 @@
 /**
- * 控制器模块,定义各页面逻辑
+ * 单机控制器模块,定义各页面逻辑
  */
-angular.module('MachineInfo', ['angular-echarts', 'smart-table',
+angular.module('MachineInfo_single', ['angular-echarts', 'smart-table',
         'ngAnimate', 'ui.bootstrap', 'MachineInfo.services'
     ])
     // 控制全局按钮及信息处理
@@ -149,6 +149,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
 
         // 当离开当前state时, 停止interval
         $scope.$on("$destroy", function(event) {
+            if (typeof currentInterval != 'undefined')
+                $interval.cancel(currentInterval);
             $interval.cancel(currentInterval);
         });
 
@@ -222,6 +224,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
 
         // 当离开当前state时, 停止interval
         $scope.$on("$destroy", function(event) {
+            if (typeof currentInterval != 'undefined')
+                $interval.cancel(currentInterval);
             $interval.cancel(currentInterval);
         });
     })
@@ -285,6 +289,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
 
         // 当离开当前state时, 停止interval
         $scope.$on("$destroy", function(event) {
+            if (typeof currentInterval != 'undefined')
+                $interval.cancel(currentInterval);
             $interval.cancel(currentInterval);
         });
     })
@@ -353,10 +359,12 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
 
         // 当离开当前state时, 停止interval
         $scope.$on("$destroy", function(event) {
+            if (typeof currentInterval != 'undefined')
+                $interval.cancel(currentInterval);
             $interval.cancel(currentInterval);
         });
     })
-    .controller('NetController', function($interval, $scope, $state, $stateParams,
+    .controller('NetController', function($interval, $scope, $state,
         stateValue, dataFactory, netInfo) {
         $scope.areaConfig = {
             // title: 'Area Chart',
@@ -416,6 +424,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
 
         // 当离开当前state时, 停止interval
         $scope.$on("$destroy", function(event) {
+            if (typeof currentInterval != 'undefined')
+                $interval.cancel(currentInterval);
             $interval.cancel(currentInterval);
         });
     })
@@ -486,6 +496,8 @@ angular.module('MachineInfo', ['angular-echarts', 'smart-table',
 
         // 当离开当前state时, 停止interval
         $scope.$on("$destroy", function(event) {
+            if (typeof currentInterval != 'undefined')
+                $interval.cancel(currentInterval);
             $interval.cancel(currentInterval);
         });
     });

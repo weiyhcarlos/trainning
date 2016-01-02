@@ -1,0 +1,65 @@
+<div class="container container-full">
+    <div ng-controller="TopCompareController">
+        <div class="row">
+            <div class="col-md-4">
+                <form name="myForm">
+                    <label for="mySelect" class="control-label" style="height:36px">选择机器:</label>
+                    <div style="display: inline" ng-dropdown-multiselect="" options="machineList" selected-model="stateValueCompare.selectedMachine" extra-settings="showSetting"></div>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <label for="begin_date" class="control-label">from:</label>
+                <input type="datetime-local" id="begin_date" class="btn selectpicker btn-default" name="input" ng-model="stateValueCompare.begin_date" placeholder="yyyy-MM-ddTHH:mm:ss" required />
+                <label for="end_date" class="control-label">to:</label>
+                <input type="datetime-local" id="end_date" class="btn selectpicker btn-default" name="input" ng-model="stateValueCompare.end_date" placeholder="yyyy-MM-ddTHH:mm:ss" required />
+                <button ng-click="setCompare()" class="btn btn-default" style="margin-left:20px">对比</button>
+            </div>
+        </div>
+        <div class="row">
+            <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+        </div>
+    </div>
+    <div class="row" ng-controller="BaseCompareController">
+        <table st-table="stateValue.selectedMachine" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>mac</th>
+                    <th>ip</th>
+                    <th>hostname</th>
+                    <th>cluster</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in stateValueCompare.selectedMachine">
+                    <td>{{row.mac}}</td>
+                    <td>{{row.ip}}</td>
+                    <td>{{row.hostname}}</td>
+                    <td>{{row.cluster}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-md-3" style="margin-top:20px">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="list-group">
+                        <a ui-sref="index.compare.average_load" class="list-group-item">平均负载</a>
+                        <a ui-sref="index.compare.net" class="list-group-item">网卡读写</a>
+                        <a ui-sref="index.compare.disk_rate" class="list-group-item">磁盘读写</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div ui-view>
+                <h3 class="page-header">Main page</h3>
+                <div class="jumbotron text-center">
+                    <p>
+                        机器对比主页
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
