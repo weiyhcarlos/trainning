@@ -1,0 +1,5 @@
+Running agent needs some conditions.
+1) System should have python 2.7 environment.
+2) Install some softwares.Running command " sh install.sh " in scripts folder could install pip , ntplib & pyyaml.
+3) Use command "service agent start|stop|restart " to control this program.
+4) Updating config.ini could change default configuration.
