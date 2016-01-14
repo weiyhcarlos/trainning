@@ -8,7 +8,7 @@ if [ ! -e /etc/init.d/agent ];then
 fi
 if [ ! -d /var/agent ];then
     mkdir /var/agent
-    cp -ar ../code/agent/*  /var/agent
+    cp -ar ../../code/agent/*  /var/agent
 fi
  
 
