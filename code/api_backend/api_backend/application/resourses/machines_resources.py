@@ -69,19 +69,18 @@ class MachinesSearch(Resource):
             return {
                 "message": "invalid time args"
             }, 400
-        module = args["module"]
-
-        module_info = {
-            "cpu":CpuModel.get_cpu,
-            "average_load":AverageLoadModel.get_average_load,
-            "memory": MemoryModel.get_memory,
-            "net": NetModel.get_net,
-            "disk": DiskModel.get_disk
-        }.get(module)(machine_id, begin_date, end_date)
-
-        if module_info:
-            return loads(module_info), 200
-        else:
+        modules = args["module"].split(",")
+        if not modules:
             return {
                 "message":"invalid module args"
             }, 400
+        module_info = {}
+        for module in modules:
+            module_info[module] = loads({
+                "cpu":CpuModel.get_cpu,
+                "average_load":AverageLoadModel.get_average_load,
+                "memory": MemoryModel.get_memory,
+                "net": NetModel.get_net,
+                "disk": DiskModel.get_disk
+            }.get(module)(machine_id, begin_date, end_date))
+        return module_info, 200
