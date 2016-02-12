@@ -7,8 +7,7 @@ angular.module('MachineInfo_compare', ['angular-echarts', 'smart-table',
     ])
     // 控制全局按钮及信息处理
     .controller('TopCompareController', function($scope, $interval, $state,
-        stateValueCompare, dataFactory, averageLoadCompareInfo,
-        netCompareInfo, diskRateCompare) {
+        stateValueCompare, dataFactory, comparePageInfo) {
         // 当查询日期没有初始化时进行初始化,否则沿用上次使用的值
         if (!stateValueCompare.end_date) {
             var date = new Date();
@@ -31,9 +30,7 @@ angular.module('MachineInfo_compare', ['angular-echarts', 'smart-table',
             if (timeDiff <= 1000 * 3600 && timeDiff > 0) {
                 stateValueCompare.isSearch = true;
                 // 清空遗留数据
-                averageLoadCompareInfo.clear();
-                diskRateCompare.clear();
-                netCompareInfo.clear();
+                comparePageInfo.clear();
                 $state.reload();
             } else if (timeDiff <= 0) {
                 $scope.alerts.push({
@@ -92,183 +89,84 @@ angular.module('MachineInfo_compare', ['angular-echarts', 'smart-table',
     .controller('BaseCompareController', function($scope, stateValueCompare) {
         $scope.stateValueCompare = stateValueCompare;
     })
-    // 控制平均负载信息处理
-    .controller('AverageLoadCompareController', function($scope, $state, $interval,
-        stateValueCompare, dataFactory, averageLoadCompareInfo) {
-        $scope.lineConfig = {
-            // title: '',
-            // subtitle: '',
-            // debug: true,
-            showXAxis: true,
-            showYAxis: true,
-            showLegend: true,
-            stack: false
-        };
 
-        // 进度条标识
-        $scope.isLoading = false;
+.controller('CompareController', function($scope, $state, $interval,
+    stateValueCompare, dataFactory, comparePageInfo) {
+    $scope.lineConfig = {
+        // title: '',
+        // subtitle: '',
+        // debug: true,
+        showXAxis: true,
+        showYAxis: true,
+        showLegend: true,
+        stack: false
+    };
+    $scope.areaConfig = {
+        // title: '',
+        // subtitle: '',
+        // debug: true,
+        showXAxis: true,
+        showYAxis: true,
+        showLegend: true,
+        stack: false
+    };
+    // 进度条标识
+    $scope.isLoading = false;
 
-        // 记录所选机器信息是否加载完成，0代表完成
-        $scope.loaded = 0;
+    // 记录所选机器信息是否加载完成，0代表完成
+    $scope.loaded = 0;
 
-        //查询时触发，当机器信息全部加载完时reload
-        function updateChart($interval) {
-            return $interval(function() {
-                if ($scope.loaded == 0) {
-                    stateValueCompare.isSearch = false;
-                    $state.reload();
-                }
-            }, 1000);
-        }
-
-        if (stateValueCompare.isSearch) {
-            //加载进度条
-            $scope.isLoading = true;
-            for (var i = 0; i < stateValueCompare.selectedMachine.length; i++) {
-                $scope.loaded++;
-                // 匿名函数，使i pass by value在异步过程中保持正确下标
-                (function(i) {
-                    dataFactory.getModule(stateValueCompare.selectedMachine[i].url,
-                            "average_load", stateValueCompare.begin_date,
-                            stateValueCompare.end_date)
-                        .success(function(data) {
-                            averageLoadCompareInfo.append(
-                                stateValueCompare.selectedMachine[i].ip, data);
-                            $scope.loaded--;
-                        });
-                })(i);
+    //查询时触发，当机器信息全部加载完时reload
+    function updateChart($interval) {
+        return $interval(function() {
+            if ($scope.loaded == 0) {
+                stateValueCompare.isSearch = false;
+                stateValueCompare.isFirst = false;
+                $state.reload();
             }
-            currentInterval = updateChart($interval);
-        } else {
-            //当有信息时渲染图表
-            if (!averageLoadCompareInfo.empty()) {
-                $scope.lineMultipleW1 = averageLoadCompareInfo.w1Avg;
-                $scope.lineMultipleW2 = averageLoadCompareInfo.w2Avg;
-                $scope.lineMultipleW3 = averageLoadCompareInfo.w3Avg;
-            }
+        }, 1000);
+    }
+
+    if (stateValueCompare.isSearch) {
+        //加载进度条
+        $scope.isLoading = true;
+        for (var i = 0; i < stateValueCompare.selectedMachine.length; i++) {
+            $scope.loaded++;
+            // 匿名函数，使i pass by value在异步过程中保持正确下标
+            (function(i) {
+                dataFactory.getModule(stateValueCompare.selectedMachine[i].url,
+                        "average_load,net,disk", stateValueCompare.begin_date,
+                        stateValueCompare.end_date)
+                    .success(function(data) {
+                        comparePageInfo.append(
+                            stateValueCompare.selectedMachine[i].ip, data);
+                        $scope.loaded--;
+                    });
+            })(i);
         }
-
-        // 当离开当前state时, 停止interval
-        $scope.$on("$destroy", function(event) {
-            if (typeof currentInterval != 'undefined')
-                $interval.cancel(currentInterval);
-        });
-    })
-    .controller('DiskRateCompareController', function($interval, $scope, $state,
-        stateValueCompare, diskRateCompare, dataFactory) {
-        $scope.areaConfig = {
-            // title: '',
-            // subtitle: '',
-            // debug: true,
-            showXAxis: true,
-            showYAxis: true,
-            showLegend: true,
-            stack: false
-        };
-
-        // 进度条标识
-        $scope.isLoading = false;
-
-        // 记录所选机器信息是否加载完成，0代表完成
-        $scope.loaded = 0;
-
-        //查询时触发，当机器信息全部加载完时reload
-        function updateChart($interval) {
-            return $interval(function() {
-                if ($scope.loaded == 0) {
-                    stateValueCompare.isSearch = false;
-                    $state.reload();
-                }
-            }, 1000);
+        currentInterval = updateChart($interval);
+    } else {
+        //当有信息时渲染图表
+        if (!comparePageInfo.empty()) {
+            $scope.lineMultipleW1 = comparePageInfo.w1Avg;
+            $scope.lineMultipleW2 = comparePageInfo.w2Avg;
+            $scope.lineMultipleW3 = comparePageInfo.w3Avg;
+            $scope.areaMultipleRead = comparePageInfo.readRate;
+            $scope.areaMultipleWrite = comparePageInfo.writeRate;
+            $scope.areaMultipleSent = comparePageInfo.sentRate;
+            $scope.areaMultipleRecv = comparePageInfo.recvRate;
         }
+    }
+    $scope.isShow = function() {
+        return stateValueCompare.isFirst || $scope.isLoading;
+    }
+    $scope.isWelcome = function() {
+        return stateValueCompare.isFirst && !$scope.isLoading;
+    }
 
-        if (stateValueCompare.isSearch) {
-            //加载进度条
-            $scope.isLoading = true;
-            for (var i = 0; i < stateValueCompare.selectedMachine.length; i++) {
-                $scope.loaded++;
-                // 匿名函数，使i pass by value在异步过程中保持正确下标
-                (function(i) {
-                    dataFactory.getModule(stateValueCompare.selectedMachine[i].url,
-                            "disk", stateValueCompare.begin_date,
-                            stateValueCompare.end_date)
-                        .success(function(data) {
-                            diskRateCompare.append(
-                                stateValueCompare.selectedMachine[i].ip, data);
-                            $scope.loaded--;
-                        });
-                })(i);
-            }
-            currentInterval = updateChart($interval);
-        } else {
-            //当有信息时渲染图表
-            if (!diskRateCompare.empty()) {
-                $scope.areaMultipleRead = diskRateCompare.readRate;
-                $scope.areaMultipleWrite = diskRateCompare.writeRate;
-            }
-        }
-        // 当离开当前state时, 停止interval
-        $scope.$on("$destroy", function(event) {
-            if (typeof currentInterval != 'undefined')
-                $interval.cancel(currentInterval);
-        });
-    })
-    .controller('NetCompareController', function($interval, $scope, $state,
-        stateValueCompare, dataFactory, netCompareInfo) {
-        $scope.lineConfig = {
-            // title: '',
-            // subtitle: '',
-            // debug: true,
-            showXAxis: true,
-            showYAxis: true,
-            showLegend: true,
-            stack: false
-        };
-
-        // 进度条标识
-        $scope.isLoading = false;
-
-        // 记录所选机器信息是否加载完成，0代表完成
-        $scope.loaded = 0;
-
-        //查询时触发，当机器信息全部加载完时reload
-        function updateChart($interval) {
-            return $interval(function() {
-                if ($scope.loaded == 0) {
-                    stateValueCompare.isSearch = false;
-                    $state.reload();
-                }
-            }, 1000);
-        }
-
-        if (stateValueCompare.isSearch) {
-            //加载进度条
-            $scope.isLoading = true;
-            for (var i = 0; i < stateValueCompare.selectedMachine.length; i++) {
-                $scope.loaded++;
-                // 匿名函数，使i pass by value在异步过程中保持正确下标
-                (function(i) {
-                    dataFactory.getModule(stateValueCompare.selectedMachine[i].url,
-                            "net", stateValueCompare.begin_date,
-                            stateValueCompare.end_date)
-                        .success(function(data) {
-                            netCompareInfo.append(
-                                stateValueCompare.selectedMachine[i].ip, data);
-                            $scope.loaded--;
-                        });
-                })(i);
-            }
-            currentInterval = updateChart($interval);
-        } else {
-            //当有信息时渲染图表
-            if (!netCompareInfo.empty()) {
-                $scope.areaMultipleSent = netCompareInfo.sentRate;
-                $scope.areaMultipleRecv = netCompareInfo.recvRate;
-            }
-        }
-        // 当离开当前state时, 停止interval
-        $scope.$on("$destroy", function(event) {
-            if (typeof currentInterval != 'undefined')
-                $interval.cancel(currentInterval);
-        });
+    // 当离开当前state时, 停止interval
+    $scope.$on("$destroy", function(event) {
+        if (typeof currentInterval != 'undefined')
+            $interval.cancel(currentInterval);
     });
+});

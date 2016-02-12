@@ -34,36 +34,6 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        //平均负载信息子页面
-        .state('index.single.average_load', {
-            url: '/average_load',
-            templateUrl: 'tpls/single/detail_part/average_load.html'
-        })
-        //cpu信息子页面
-        .state('index.single.cpu', {
-            url: '/cpu',
-            templateUrl: 'tpls/single/detail_part/cpu.html'
-        })
-        //内存信息子页面
-        .state('index.single.memory', {
-            url: '/memory',
-            templateUrl: 'tpls/single/detail_part/memory.html'
-        })
-        //磁盘使用信息子页面
-        .state('index.single.disk_usage', {
-            url: '/disk_usage',
-            templateUrl: 'tpls/single/detail_part/disk_usage.html'
-        })
-        //磁盘速率信息子页面
-        .state('index.single.disk_rate', {
-            url: '/disk_rate',
-            templateUrl: 'tpls/single/detail_part/disk_rate.html'
-        })
-        //网卡速率信息子页面
-        .state('index.single.net', {
-            url: '/net',
-            templateUrl: 'tpls/single/detail_part/net.html'
-        })
         .state('index.compare', {
             url: '/compare',
             views: {
@@ -71,17 +41,5 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
                     templateUrl: 'tpls/compare/detail.html'
                 }
             }
-        })
-        .state('index.compare.disk_rate', {
-            url: '/disk_rate',
-            templateUrl: 'tpls/compare/detail_part/disk_rate.html'
-        })
-        .state('index.compare.net', {
-            url: '/net',
-            templateUrl: 'tpls/compare/detail_part/net.html'
-        })
-        .state('index.compare.average_load', {
-            url: '/average_load',
-            templateUrl: 'tpls/compare/detail_part/average_load.html'
         });
 });

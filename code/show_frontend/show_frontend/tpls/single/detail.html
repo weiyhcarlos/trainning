@@ -40,28 +40,46 @@
             </tbody>
         </table>
     </div>
-    <div class="row">
-        <div class="col-md-3" style="margin-top:20px">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="list-group">
-                        <a ui-sref="index.single.cpu" class="list-group-item">CPU比率</a>
-                        <a ui-sref="index.single.memory" class="list-group-item">内存使用</a>
-                        <a ui-sref="index.single.average_load" class="list-group-item">平均负载</a>
-                        <a ui-sref="index.single.net" class="list-group-item">网卡读写</a>
-                        <a ui-sref="index.single.disk_usage" class="list-group-item">磁盘使用</a>
-                        <a ui-sref="index.single.disk_rate" class="list-group-item">磁盘读写</a>
-                    </div>
+
+    <div ng-controller="SingleController">
+        <uib-progressbar class="progress-striped active" value="100" type="info" ng-show="isLoading">dynamic show charts loading</uib-progressbar>
+        <div class="row" ng-hide="isLoading">
+            <div class="col-md-4">
+                <h5 class="page-header">Average Load <small>单位:个</small> </h5>
+                <div>
+                    <line-chart config="lineConfig" data="averageLoadLineMultiple"></line-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Cpu Percentage <small>单位:%</small></h5>
+                <div>
+                    <bar-chart config="barConfig" data="cpuBarMultiple"></bar-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Disk Rate <small>单位:KB/S</small></h5>
+                <div>
+                    <area-chart config="areaConfig" data="diskRateAreaMultiple"></area-chart>
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
-            <div ui-view>
-                <h3 class="page-header">Main page</h3>
-                <div class="jumbotron text-center">
-                    <p>
-                        单机信息主页
-                    </p>
+        <div class="row" ng-hide="isLoading">
+            <div class="col-md-4">
+                <h5 class="page-header">Disk Usage    <small>单位:GB</small></h5>
+                <div>
+                    <line-chart config="lineConfig" data="diskUsageLineMultiple"></line-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Memory Usage <small>单位:MB</small></h5>
+                <div>
+                    <bar-chart config="barConfig" data="memoryBarMultiple"></bar-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Net Rate <small>单位:KB/s</small></h5>
+                <div>
+                    <area-chart config="areaConfig" data="netAreaMultiple"></area-chart>
                 </div>
             </div>
         </div>
