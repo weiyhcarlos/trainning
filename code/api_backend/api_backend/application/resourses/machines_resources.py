@@ -70,23 +70,18 @@ class MachinesSearch(Resource):
                 "message": "invalid time args"
             }, 400
         module = args["module"]
-        if module == "cpu":
-            return loads(CpuModel.get_cpu(
-                machine_id, begin_date, end_date)), 200
-        elif module == "average_load":
-            return loads(AverageLoadModel.get_average_load(
-                machine_id, begin_date, end_date)), 200
-        elif module == "memory":
-            return loads(MemoryModel.get_memory(machine_id,
-                begin_date, end_date)), 200
-        elif module == "net":
-            return loads(NetModel.get_net(machine_id,
-                begin_date, end_date)), 200
-        elif module == "disk":
-            return loads(DiskModel.get_disk(machine_id,
-                begin_date, end_date)), 200
+
+        module_info = {
+            "cpu":CpuModel.get_cpu,
+            "average_load":AverageLoadModel.get_average_load,
+            "memory": MemoryModel.get_memory,
+            "net": NetModel.get_net,
+            "disk": DiskModel.get_disk
+        }.get(module)(machine_id, begin_date, end_date)
+
+        if module_info:
+            return loads(module_info), 200
         else:
             return {
                 "message":"invalid module args"
             }, 400
-
