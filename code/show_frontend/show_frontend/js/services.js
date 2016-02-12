@@ -1,6 +1,19 @@
 /**
  * 服务模块,自定义服务
  */
+
+function generateDataPoints(keyList) {
+    var dict = {};
+    for (var i = 0; i < keyList.length; i++) {
+        dict[keyList[i]] = {
+            name: keyList[i],
+            datapoints: []
+        };
+    }
+
+    return dict;
+}
+
 angular.module('MachineInfo.services', [])
     //存储全局state变量
     .value('stateValue', {
@@ -17,52 +30,13 @@ angular.module('MachineInfo.services', [])
         begin_date: null
     })
     .value('cpuInfo', {
-        percentage: {
-            user: {
-                name: "user",
-                datapoints: []
-            },
-            nice: {
-                name: "nice",
-                datapoints: []
-            },
-            system: {
-                name: "system",
-                datapoints: []
-            },
-            idle: {
-                name: "idle",
-                datapoints: []
-            },
-            iowait: {
-                name: "iowait",
-                datapoints: []
-            },
-            irq: {
-                name: "irq",
-                datapoints: []
-            },
-            softirq: {
-                name: "softirq",
-                datapoints: []
-            },
-            steal: {
-                name: "steal",
-                datapoints: []
-            },
-            guest: {
-                name: "guest",
-                datapoints: []
-            },
-            guest_nice: {
-                name: "guest_nice",
-                datapoints: []
-            }
-        },
+        percentage: generateDataPoints(["user","nice", "system", "idle",
+         "iowait", "irq", "softirq", "steal", "guest", "guest_nice" ]),
         graphWidth: 20,
         //加载单次数据,当数据数组长度超过graphwidth,
         //移除最早的数据, 使得动态加载时保持固定展示长度
         load: function(data) {
+            // console.log(percentage);
             userPoint = this.percentage.user.datapoints;
             if (userPoint.length == 0 || data.time.localeCompare(
                     userPoint[userPoint.length - 1].x)) {
@@ -102,44 +76,8 @@ angular.module('MachineInfo.services', [])
         }
     })
     .value('memoryInfo', {
-        usage: {
-            total: {
-                name: "total",
-                datapoints: []
-            },
-            used: {
-                name: "used",
-                datapoints: []
-            },
-            abs_used: {
-                name: "abs_used",
-                datapoints: []
-            },
-            free: {
-                name: "free",
-                datapoints: []
-            },
-            buffers: {
-                name: "buffers",
-                datapoints: []
-            },
-            cached: {
-                name: "cached",
-                datapoints: []
-            },
-            active: {
-                name: "active",
-                datapoints: []
-            },
-            inactive: {
-                name: "inactive",
-                datapoints: []
-            },
-            swap_used: {
-                name: "swap_used",
-                datapoints: []
-            }
-        },
+        usage: generateDataPoints(["total", "used", "abs_used", "free",
+            "buffers", "cached", "active", "inactive", "swap_used"]),
         graphWidth: 20,
         //加载单次数据,当数据数组长度超过graphwidth,
         //移除最早的数据, 使得动态加载时保持固定展示长度
