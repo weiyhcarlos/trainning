@@ -2,7 +2,7 @@
 
 from bson.json_util import dumps
 
-from . import db
+from . import client
 
 class AverageLoadModel(object):
     """表结构:
@@ -17,10 +17,11 @@ class AverageLoadModel(object):
     """
 
     @staticmethod
-    def get_average_load(mac, begin_date=None, end_date=None):
+    def get_average_load(dbname, mac, begin_date=None, end_date=None):
         """如果提供时间段,返回时间段内的average load信息
             否则返回最新信息
         """
+        db = client[dbname]
         collection = db["average_load"]
         if not begin_date or not end_date:
             return dumps(collection.find({"machine_id": mac},

@@ -35,7 +35,7 @@ angular.module('MachineInfo_compare', ['angular-echarts', 'smart-table',
         $scope.setCompare = function() {
             var timeDiff =
                 stateValueCompare.end_date.getTime() - stateValueCompare.begin_date.getTime();
-            if (timeDiff <= 1000 * 3600 && timeDiff > 0) {
+            if (timeDiff <= 1000 * 3600*24*10 && timeDiff > 0) {
                 stateValueCompare.isSearch = true;
                 // 清空遗留数据
                 comparePageInfo.clear();
@@ -48,7 +48,7 @@ angular.module('MachineInfo_compare', ['angular-echarts', 'smart-table',
             } else {
                 $scope.alerts.push({
                     type: "success",
-                    msg: "请选择不多于一个小时的查询时间段"
+                    msg: "请选择不多于十天的查询时间段"
                 });
             }
         }

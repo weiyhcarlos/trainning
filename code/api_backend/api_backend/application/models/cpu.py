@@ -2,7 +2,7 @@
 
 from bson.json_util import dumps
 
-from . import db
+from . import client
 
 class CpuModel(object):
     """表结构:
@@ -23,10 +23,11 @@ class CpuModel(object):
      }
     """
     @staticmethod
-    def get_cpu(mac, begin_date=None, end_date=None):
+    def get_cpu(dbname, mac, begin_date=None, end_date=None):
         """如果提供时间段,返回时间段内的cpu信息
             否则返回最新信息
         """
+        db = client[dbname]
         collection = db["cpu"]
         if not begin_date or not end_date:
             return dumps(collection.find({"machine_id": mac},

@@ -2,7 +2,7 @@
 
 from bson.json_util import dumps
 
-from . import db
+from . import client
 
 class NetModel(object):
     """表结构:
@@ -26,10 +26,11 @@ class NetModel(object):
     }
     """
     @staticmethod
-    def get_net(mac, begin_date=None, end_date=None):
+    def get_net(dbname, mac, begin_date=None, end_date=None):
         """如果提供时间段,返回时间段内的net信息
             否则返回最新信息
         """
+        db = client[dbname]
         collection = db["net"]
         if not begin_date or not end_date:
             return dumps(collection.find({"machine_id": mac},

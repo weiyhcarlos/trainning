@@ -2,7 +2,7 @@
 
 from bson.json_util import dumps
 
-from . import db
+from . import client
 
 class MachineModel(object):
     """表结构:
@@ -14,10 +14,11 @@ class MachineModel(object):
     }
     """
     @staticmethod
-    def get_machine(machine_id=None):
+    def get_machine(dbname, machine_id=None):
         """如果提供时间段,返回时间段内的net信息
             否则返回最新信息
         """
+        db = client[dbname]
         collection = db["machine"]
         if machine_id == None:
             return dumps(collection.find({}))
