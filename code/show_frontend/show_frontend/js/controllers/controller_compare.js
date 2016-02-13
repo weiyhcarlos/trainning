@@ -8,6 +8,14 @@ angular.module('MachineInfo_compare', ['angular-echarts', 'smart-table',
     // 控制全局按钮及信息处理
     .controller('TopCompareController', function($scope, $interval, $state,
         stateValueCompare, dataFactory, comparePageInfo) {
+        $scope.open = {
+            begin_date: false,
+            end_date: false
+        };
+
+        $scope.openCalendar = function(e, date) {
+            $scope.open[date] = true;
+        };
         // 当查询日期没有初始化时进行初始化,否则沿用上次使用的值
         if (!stateValueCompare.end_date) {
             var date = new Date();

@@ -2,11 +2,20 @@
  * 单机控制器模块,定义各页面逻辑
  */
 angular.module('MachineInfo_single', ['angular-echarts', 'smart-table',
-        'ngAnimate', 'ui.bootstrap', 'MachineInfo.services'
+        'ngAnimate', 'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'MachineInfo.services'
     ])
     // 控制全局按钮及信息处理
     .controller('TopController', function($scope, $interval, $state,
         stateValue, dataFactory, singlePageInfo) {
+        $scope.open = {
+            begin_date: false,
+            end_date:false
+        };
+
+        $scope.openCalendar = function(e, date) {
+            $scope.open[date] = true;
+        };
+
         // 当查询日期没有初始化时进行初始化,否则沿用上次使用的值
         if (!stateValue.end_date) {
             var date = new Date();

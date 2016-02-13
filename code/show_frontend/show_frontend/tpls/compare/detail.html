@@ -8,10 +8,21 @@
                 </form>
             </div>
             <div class="col-md-8">
-                <label for="begin_date" class="control-label">from:</label>
-                <input type="datetime-local" id="begin_date" class="btn selectpicker btn-default" name="input" ng-model="stateValueCompare.begin_date" placeholder="yyyy-MM-ddTHH:mm:ss" required />
-                <label for="end_date" class="control-label">to:</label>
-                <input type="datetime-local" id="end_date" class="btn selectpicker btn-default" name="input" ng-model="stateValueCompare.end_date" placeholder="yyyy-MM-ddTHH:mm:ss" required />
+                <label for="begin_date" style="float:left;display: inline-block;margin-top: 5px;">from:</label>
+                <p class="input-group" style="width:30%;float:left;margin-right:10px;">
+                    <input type="text" class="form-control" datetime-picker="MM/dd/yyyy HH:mm" ng-model="stateValueCompare.begin_date" is-open="open.begin_date" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'begin_date')"><i class="fa fa-calendar"></i></button>
+            </span>
+                </p>
+                <label for="end_date" style="float:left;display: inline-block;margin-top: 5px;">to:</label>
+                <p class="input-group" style="width:30%;float:left;margin-right:10px;">
+                    <input type="text" class="form-control" datetime-picker="MM/dd/yyyy HH:mm" ng-model="stateValueCompare.end_date" is-open="open.end_date" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'end_date')"><i class="fa fa-calendar"></i></button>
+            </span>
+                </p>
+
                 <button ng-click="setCompare()" class="btn btn-default" style="margin-left:20px">对比</button>
             </div>
         </div>

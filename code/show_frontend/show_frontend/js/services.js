@@ -340,6 +340,8 @@ angular.module('MachineInfo.services', [])
         clear: function() {
             for (var key in this.percentage)
                 this.percentage[key].datapoints.length = 0;
+            for (var key in this.usage)
+                this.usage[key].datapoints.length = 0;
             this.w1Avg.datapoints.length = 0;
             this.w2Avg.datapoints.length = 0;
             this.w3Avg.datapoints.length = 0;
