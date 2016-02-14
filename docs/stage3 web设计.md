@@ -236,14 +236,15 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
  说明:根据所选时间段返回指定ID机器的CPU信息  
 请求方法: GET  
 请求参数:  
-    module=["cpu", "average_load", "disk", "net", "memory"]中的一个--必须  
+    module=["cpu", "average_load", "disk", "net", "memory"]中的一个或多个，用逗号隔开--必须  
     start_time:开始时间段 -- 必须  
     end_time:结束时间段 -- 必须  
 响应数据(成功):  
 1.module=cpu:  
 
         Status: 200 OK
-        [
+        {
+        "cpu":[
             {
                 "time":"2013-09-18 11:16:32",
                 "user":0,
@@ -259,11 +260,13 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
             },
             ...
         ]
+        }
     
     2.module=memory:
 
         Status: 200 OK
-        [
+        {
+        "memory":[
             {
                 "time":"2013-09-18 11:16:32",
                 "total":100,
@@ -278,12 +281,13 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
             },
             ...
         ]
-
+        }
 
     3.module=disk:
 
         Status: 200 OK
-        [
+        {
+        "disk":[
             {
                 "time":"2013-09-18 11:16:32",
                 "t_cap":100,
@@ -308,11 +312,13 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
             },
             ...
         ]
+        }
 
     4.module=net:
 
         Status: 200 OK
-        [
+        {
+        "net":[
             {
                 "time":"2013-09-18 11:16:32",
                 "t_sent_rate":200,
@@ -331,11 +337,13 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
             },
             ...
         ]
-        
+        }
+    
     5.module=average_load:
 
         Status: 200 OK
-        [
+        {
+        "average_load":[
             {
                 "time":"2013-09-18 11:16:32",
                 "w1_avg": 0.22, 
@@ -344,6 +352,7 @@ functionNamesLikeThis, variableNamesLikeThis, ClassNamesLikeThis, EnumNamesLikeT
             },
             ...
         ]
+        }
 响应数据(失败):
 
         Status:400
