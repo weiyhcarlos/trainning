@@ -49,3 +49,9 @@ class HttpHandler(BaseHandler):
                 "ret":""
             }
 
+    def destroy_connection(self):
+        """在实例销毁时做连接关闭处理
+        """
+        pass
+
+
