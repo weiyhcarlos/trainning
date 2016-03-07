@@ -24,11 +24,11 @@ class CheckInstance(Tools):
         """
         ret = {}
         child = subprocess.Popen(
-            "ps -ef | grep agent.py | wc -l", shell=True,
+            '''ps -ef | grep "python agent.py" | wc -l''', shell=True,
             stdout=subprocess.PIPE)
         child.wait()
         num = string.atoi(child.stdout.read())
-        if num > 3:
+        if num > 4:
             ret['status'] = 0
             return ret
         try:
