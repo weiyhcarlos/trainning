@@ -1,0 +1,96 @@
+<div class="container container-full">
+    <div ng-controller="TopController">
+        <div class="row">
+            <div class="col-md-4">
+                <form name="myForm">
+                    <label for="mySelect" class="control-label" style="height:36px">选择机器:</label>
+                    <select name="mySelect" class="btn selectpicker btn-default" style="height:36px" ng-options="option.ip for option in machineList" ng-model="stateValue.selectedMachine"></select>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <label for="begin_date" style="float:left;display: inline-block;margin-top: 5px;">from:</label>
+                <p class="input-group" style="width:30%;float:left;margin-right:10px;">
+                    <input type="text" class="form-control" datetime-picker="MM/dd/yyyy HH:mm" ng-model="stateValue.begin_date" is-open="open.begin_date" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'begin_date')"><i class="fa fa-calendar"></i></button>
+            </span>
+                </p>
+                <label for="end_date" style="float:left;display: inline-block;margin-top: 5px;">to:</label>
+                <p class="input-group" style="width:30%;float:left;margin-right:10px;">
+                    <input type="text" class="form-control" datetime-picker="MM/dd/yyyy HH:mm" ng-model="stateValue.end_date" is-open="open.end_date" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'end_date')"><i class="fa fa-calendar"></i></button>
+            </span>
+                </p>
+                <button ng-click="setSearch()" class="btn btn-default" ng-disabled="myForm.input.$valid">查询</button>
+                <button ng-click="setRealTime()" class="btn btn-default">实时</button>
+            </div>
+        </div>
+        <div class="row">
+            <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+        </div>
+    </div>
+    <div class="row" ng-controller="BaseController">
+        <table st-table="[stateValue.selectedMachine]" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>mac</th>
+                    <th>ip</th>
+                    <th>hostname</th>
+                    <th>cluster</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in [stateValue.selectedMachine]">
+                    <td>{{row.mac}}</td>
+                    <td>{{row.ip}}</td>
+                    <td>{{row.hostname}}</td>
+                    <td>{{row.cluster}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-controller="SingleController">
+        <uib-progressbar class="progress-striped active" value="100" type="info" ng-show="isLoading">dynamic show charts loading</uib-progressbar>
+        <div class="row" ng-hide="isLoading">
+            <div class="col-md-4">
+                <h5 class="page-header">Average Load <small>单位:个</small> </h5>
+                <div>
+                    <line-chart config="lineConfig" data="averageLoadLineMultiple"></line-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Cpu Percentage <small>单位:%</small></h5>
+                <div>
+                    <bar-chart config="barConfig" data="cpuBarMultiple"></bar-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Disk Rate <small>单位:KB/S</small></h5>
+                <div>
+                    <area-chart config="areaConfig" data="diskRateAreaMultiple"></area-chart>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-hide="isLoading">
+            <div class="col-md-4">
+                <h5 class="page-header">Disk Usage    <small>单位:GB</small></h5>
+                <div>
+                    <line-chart config="lineConfig" data="diskUsageLineMultiple"></line-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Memory Usage <small>单位:MB</small></h5>
+                <div>
+                    <bar-chart config="barConfig" data="memoryBarMultiple"></bar-chart>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="page-header">Net Rate <small>单位:KB/s</small></h5>
+                <div>
+                    <area-chart config="areaConfig" data="netAreaMultiple"></area-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

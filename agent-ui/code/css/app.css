@@ -1,0 +1,37 @@
+.navbar-center {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    text-align: center;
+    margin: auto;
+    height: 100%;
+}
+
+.barcode {
+    white-space: pre;
+}
+
+.page-header {
+    margin-top: 20px;
+}
+
+.progress-striped {
+    margin-top: 100px;
+}
+
+.form-horizontal {
+   width:500px;
+}
+
+.datetime-picker-dropdown {
+  
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default {
+  border: 0;
+}
+
+.datetime-picker-dropdown > li.time-picker-menu div > table {
+  
+}

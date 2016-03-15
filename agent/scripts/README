@@ -1,0 +1,9 @@
+Install
+	pls run agent_scripts/install.sh firstly.It will install related libs which agent requires.
+
+Service agent
+        it locates in  folder agent_scripts 
+	you could run command like "service agent {start|stop|status|reload|restart}".
+
+Script run.sh
+	you also could use run.sh to control agent.

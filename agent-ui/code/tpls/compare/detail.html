@@ -1,0 +1,112 @@
+<div class="container container-full">
+    <div ng-controller="TopCompareController">
+        <div class="row">
+            <div class="col-md-4">
+                <form name="myForm">
+                    <label for="mySelect" class="control-label" style="height:36px">选择机器:</label>
+                    <div style="display: inline" ng-dropdown-multiselect="" options="machineList" selected-model="stateValueCompare.selectedMachine" extra-settings="showSetting"></div>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <label for="begin_date" style="float:left;display: inline-block;margin-top: 5px;">from:</label>
+                <p class="input-group" style="width:30%;float:left;margin-right:10px;">
+                    <input type="text" class="form-control" datetime-picker="MM/dd/yyyy HH:mm" ng-model="stateValueCompare.begin_date" is-open="open.begin_date" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'begin_date')"><i class="fa fa-calendar"></i></button>
+            </span>
+                </p>
+                <label for="end_date" style="float:left;display: inline-block;margin-top: 5px;">to:</label>
+                <p class="input-group" style="width:30%;float:left;margin-right:10px;">
+                    <input type="text" class="form-control" datetime-picker="MM/dd/yyyy HH:mm" ng-model="stateValueCompare.end_date" is-open="open.end_date" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'end_date')"><i class="fa fa-calendar"></i></button>
+            </span>
+                </p>
+
+                <button ng-click="setCompare()" class="btn btn-default" style="margin-left:20px">对比</button>
+            </div>
+        </div>
+        <div class="row">
+            <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+        </div>
+    </div>
+    <div class="row" ng-controller="BaseCompareController">
+        <table st-table="stateValue.selectedMachine" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>mac</th>
+                    <th>ip</th>
+                    <th>hostname</th>
+                    <th>cluster</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in stateValueCompare.selectedMachine">
+                    <td>{{row.mac}}</td>
+                    <td>{{row.ip}}</td>
+                    <td>{{row.hostname}}</td>
+                    <td>{{row.cluster}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div ng-controller="CompareController">
+        <uib-progressbar class="progress-striped active" value="100" type="info" ng-show="isLoading">dynamic show charts loading</uib-progressbar>
+        <div class="jumbotron text-center" ng-show="isWelcome()">
+            <p>
+                机器对比主页
+            </p>
+        </div>
+        <div ng-hide="isShow()">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="page-header">Average Load <small>图表指标:w1_avg  单位:个</small> </h5>
+                    <div>
+                        <line-chart config="lineConfig" data="lineMultipleW1"></line-chart>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="page-header">Average Load <small>图表指标:w5_avg 单位:个</small> </h5>
+                    <div>
+                        <line-chart config="lineConfig" data="lineMultipleW2"></line-chart>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="page-header">Average Load <small>图表指标:w15_avg 单位:个</small> </h5>
+                    <div>
+                        <line-chart config="lineConfig" data="lineMultipleW3"></line-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="page-header">Disk Rate <small>图表指标:read_rate 单位:KB/S</small></h5>
+                    <div>
+                        <area-chart config="areaConfig" data="areaMultipleRead"></area-chart>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="page-header">Disk Rate <small>图表指标:write_rate 单位:KB/S</small></h5>
+                    <div>
+                        <area-chart config="areaConfig" data="areaMultipleWrite"></area-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="page-header">Net Rate <small>图表指标:sent_rate 单位:KB/s</small></h5>
+                    <div>
+                        <area-chart config="areaConfig" data="areaMultipleSent"></area-chart>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="page-header">Net Rate <small>图表指标:recv_rate 单位:KB/s</small></h5>
+                    <div>
+                        <area-chart config="areaConfig" data="areaMultipleRecv"></area-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
