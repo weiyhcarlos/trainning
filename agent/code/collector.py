@@ -5,7 +5,7 @@ from uuid import getnode as get_mac
 from datetime import datetime
 import socket, importlib, logging
 
-from util import str_to_class
+from utils import str_to_class
 
 class Collector(object):
     """收集模块类,调用各基模块类

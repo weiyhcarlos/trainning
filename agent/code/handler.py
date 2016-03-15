@@ -2,7 +2,7 @@
 """信息处理模块
 """
 
-from util import str_to_class
+from utils import str_to_class
 
 class Handler(object):
     """数据处理类

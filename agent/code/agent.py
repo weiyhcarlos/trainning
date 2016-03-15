@@ -15,7 +15,7 @@ import threading
 import signal
 import logging
 
-PATH = "config.ini"
+PATH = "../conf/config.ini"
 
 def handler(signum, frame):
     global global_config

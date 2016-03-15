@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
-from tools import Tools
+
+from . import Tools
 import socket
 import subprocess
 import string

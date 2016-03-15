@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from tools import Tools
+
+from . import Tools
 import yaml
 try:
     import simplejson as json
@@ -37,7 +38,3 @@ class Config(Tools):
         result["status"] = 0
         result["ret"] = data
         return result
-
-if __name__ == '__main__':
-    con = Config("./config.ini")
-    print con.run()

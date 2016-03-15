@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
 
-from tools import Tools
+from . import Tools
 import sys
 import argparse
 import socket
