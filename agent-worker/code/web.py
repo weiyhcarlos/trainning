@@ -1,12 +1,14 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import request
-import json, os
+import json
+import os
 
-from app import create_app
-from app.config import config
-from app.upload_task import upload_to_mongodb
+from flask import request
+
+from code.app import create_app
+from conf.config import config
+from code.app.upload_task import upload_to_mongodb
 
 config = config[os.getenv('FLASK_CONFIG') or 'default']
 

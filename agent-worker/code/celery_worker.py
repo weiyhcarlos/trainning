@@ -1,8 +1,12 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- encoding=utf8 -*-
+'''
+Filename: celery_worker.py
+'''
 
 import os
-from app import celery, create_app
-from app import upload_task
+from code.app import celery, create_app
+from code.app import upload_task
 
 #使用app的配置重新配置celery
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')

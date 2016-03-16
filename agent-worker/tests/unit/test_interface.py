@@ -2,15 +2,6 @@
 # -*- encoding=utf8 -*-
 """
 Filename: test_interface.py
-Author:   Wei Yuhang
-@contact: gzweiyuhang@corp.netease.com
-@version: $Id$
-
-Description:
-
-Changelog:
-
-Created: 2016-02-14 12:24
 """
 
 import pytest
@@ -21,8 +12,8 @@ import logging
 
 from pymongo import MongoClient
 
-from app import config
-from web import app
+from conf.config import config
+from code.web import app
 
 config = config[os.getenv("FLASK_CONFIG") or "default"]
 logging.basicConfig(level=logging.INFO)

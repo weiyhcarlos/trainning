@@ -1,4 +1,8 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- encoding=utf8 -*-
+'''
+Filename: upload_task.py
+'''
 
 import os
 
@@ -6,7 +10,7 @@ from pymongo import MongoClient
 from pymongo.errors import PyMongoError
 
 from . import celery
-from config import config
+from conf.config import config
 
 config = config[os.getenv('FLASK_CONFIG') or 'default']
 
@@ -15,7 +19,7 @@ database = client[config.MONGO_DATABASE]
 
 #任务异常时30秒之后进行重试
 @celery.task(name="web.upload_to_mongodb", bind=True,
-    default_retry_delay=30)
+             default_retry_delay=30)
 def upload_to_mongodb(self, modules, data):
     """celery后台任务，负责将信息上传到mongodb
     """
@@ -45,7 +49,7 @@ def upload_to_mongodb(self, modules, data):
         collection = database[module]
         try:
             if not collection.find_one({"machine_id":data["mac"],
-                "time":data["time"]}):
+                                        "time":data["time"]}):
                 collection.insert_one(data[module])
         except PyMongoError as exc:
             raise self.retry(exc=exc)
