@@ -20,8 +20,8 @@ import json
 import logging
 import datetime
 
-from application import app
-from application.config import config
+from code import app
+from conf.config import config
 
 config = config[os.getenv('FLASK_CONFIG') or 'default']
 logging.basicConfig(level=logging.INFO)

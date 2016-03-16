@@ -1,4 +1,8 @@
-#-*- coding: UTF-8 -*- 
+#!/usr/bin/env python
+# -*- encoding=utf8 -*-
+'''
+Filename: net.py
+'''
 
 from bson.json_util import dumps
 
@@ -30,16 +34,15 @@ class NetModel(object):
         """如果提供时间段,返回时间段内的net信息
             否则返回最新信息
         """
-        db = client[dbname]
-        collection = db["net"]
+        collection = client[dbname]["net"]
         if not begin_date or not end_date:
             return dumps(collection.find({"machine_id": mac},
-                {"_id": False, "machine_id":False}).sort(
-                [["time", -1]]).limit(1)[0])
+                                         {"_id": False, "machine_id":False}
+                                        ).sort([["time", -1]]).limit(1)[0])
         return dumps(collection.find({
-                "time": {
-                    "$gte": begin_date,
-                    "$lte": end_date
+            "time": {
+                "$gte": begin_date,
+                "$lte": end_date
                 },
-                "machine_id":mac
+            "machine_id":mac
             }, {"_id": False, "machine_id":False}))

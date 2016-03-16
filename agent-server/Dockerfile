@@ -2,7 +2,7 @@ FROM nginx
 
 RUN mkdir -p /var/www
 
-ADD code /var/www/api_backend
+ADD . /var/www/api_backend
 ADD misc/requirements.txt /
 ADD misc/start.sh /
 ADD misc/api_backend.conf /etc/nginx/conf.d/

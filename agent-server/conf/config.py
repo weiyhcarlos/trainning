@@ -1,13 +1,64 @@
-import os
+#-*- coding: UTF-8 -*-
 
-def env_default(k, default):
-    v = os.environ.get(k, default)
-    globals()[k] = v
+#import os
+# basedir = os.path.abspath(os.path.dirname(__file__))
 
-env_default("REDIS_ADDR", 'redis')
-env_default("REDIS_PORT", 6379)
+from collections import OrderedDict
 
-env_default("APP_HOST", '0.0.0.0')
-env_default("APP_PORT", 80)
+class Config:
+    """配置基类
+    """
+    # SECRET_KEY = os.environ.get('SECRET_KEY') or 'guess guess'
+    APP_HOST = '0.0.0.0'
+    APP_PORT = 8888
 
-env_default("DEBUG",  True)
+    MONGO_HOST = "123.58.165.133"
+    MONGO_PORT = 32774
+
+    CONNECT = False
+    DEBUG = True
+
+    STEPS = OrderedDict((
+        ("1h", 60*60),
+        ("1m", 60),
+        ("5s", 5)
+    ))
+
+    @staticmethod
+    def init_app(app):
+        pass
+
+class DevelopmentConfig(Config):
+    """开发配置
+    """
+    MONGO_DATABASE = {
+        "5s":"machine_test_5s",
+        "1m":"machine_test_1m",
+        "1h":"machine_test_1h"
+        }
+
+class TestingConfig(Config):
+    """测试配置
+    """
+    MONGO_DATABASE = {
+        "5s":"machine_test_test_5s",
+        "1m":"machine_test_test_1m",
+        "1h":"machine_test_test_1h"
+        }
+
+class ProductionConfig(Config):
+    """生产配置
+    """
+    MONGO_DATABASE = {
+        "5s":"machine_test_5s",
+        "1m":"machine_test_1m",
+        "1h":"machine_test_1h"
+        }
+
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+
+    'default': DevelopmentConfig
+}
