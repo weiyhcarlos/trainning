@@ -5,18 +5,15 @@
 # from SocketServer import (TCPServer as TCP,
 #                         StreamRequestHandler as SRH)
 import socket
-from sys import exit
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import logging
+import json
 
-global global_vars
-global_vars = {}
+global GLOBAL_VARS
+GLOBAL_VARS = {}
 BUF_SIZE = 1024
 
 
-class Server:
+class Server(object):
     """start server to process request
     """
 
@@ -30,33 +27,33 @@ class Server:
             self.tcp_sock.listen(5)
             self.tcp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             while True:
-                global global_vars
-                sock, addr = self.tcp_sock.accept()
-                str = sock.recv(BUF_SIZE)
-                var_dict = json.loads(str)
-                print "server read:%s" % str
+                global GLOBAL_VARS
+                sock, _ = self.tcp_sock.accept()
+                read_str = sock.recv(BUF_SIZE)
+                var_dict = json.loads(read_str)
+                logging.info("server read:%s" % read_str)
                 if "ttl" in var_dict.keys():
                     # print 'ttl in dict'
-                    global_vars['ttl'] = var_dict['ttl']
+                    GLOBAL_VARS['ttl'] = var_dict['ttl']
                 if "modules" in var_dict.keys():
-                    ret = global_vars[
+                    ret = GLOBAL_VARS[
                         'collectObj'].set_modules(var_dict["modules"])
                     if ret['status'] == 0:
-                        global_vars['modules'] = ret['ret']
+                        GLOBAL_VARS['modules'] = ret['ret']
                 sock.close()
         except Exception, e:
-            print "error in server:", e
+            logging.info("error in server: %s"% e)
             exit(1)
 
 
-def start_server(vars):
-    global global_vars
-    global_vars = vars
+def start_server(var):
+    global GLOBAL_VARS
+    GLOBAL_VARS = var
     try:
-        tcpServ = Server(global_vars['port'])
-        tcpServ.run()
+        tcp_serv = Server(GLOBAL_VARS['port'])
+        tcp_serv.run()
     except Exception, e:
-        print e
+        logging.error(e)
         exit(0)
 
 if __name__ == '__main__':

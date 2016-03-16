@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
 
-from . import Tools
 import sys
 import argparse
 import socket
-try:
-    import simplejson as json
-except ImportError:
-    import json
+import json
 
+from . import Tools
 
 class ArgsParse(Tools):
     """analysis command line parameter
@@ -40,7 +37,8 @@ class ArgsParse(Tools):
         parse.add_argument("-m", "--modules", nargs='*', action='store',
                            help="use modules MODULES")
         parse.add_argument("-t", "--ttl", type=int,
-                           action="store", help="set agent period, default is 5s")
+                           action="store",
+                           help="set agent period, default is 5s")
         self.args = parse.parse_args()
 
     def tcpConnect(self, msg):
@@ -66,7 +64,7 @@ class ArgsParse(Tools):
     def run(self):
         """analysis  parameter and execute related flow
         Args: None
-        Return: if self.isExisted == 0 then exit() 
+        Return: if self.isExisted == 0 then exit()
                 else return dict{"modules":dict,"ttl":int}
         """
         ret = {}

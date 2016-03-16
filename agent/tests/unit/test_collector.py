@@ -20,7 +20,7 @@ import datetime
 import socket
 from uuid import getnode as get_mac
 
-import collector
+from code import collector
 logging.basicConfig(level=logging.INFO)
 
 modules = ["cpu", "memory", "disk", "net", "average_load"]

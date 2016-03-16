@@ -47,15 +47,17 @@ class NetCollector(BaseCollector):
                 return_info["per_net_info"].append({
                     "net_name":name,
                     "sent_rate":float(current_net_info[name].bytes_sent-
-                        self.last_net_info[name].bytes_sent)/(interval),
+                                      self.last_net_info[name].bytes_sent
+                                     )/interval,
                     "recv_rate":float(current_net_info[name].bytes_recv-
-                        self.last_net_info[name].bytes_recv)/(interval),
+                                      self.last_net_info[name].bytes_recv
+                                     )/interval,
                 })
 
         #根据每个磁盘的速率计算总磁盘速率
         return_info["t_sent_rate"] = sum(u["sent_rate"] for u in
-                return_info["per_net_info"])
+                                         return_info["per_net_info"])
         return_info["t_recv_rate"] = sum(u["recv_rate"] for u in
-                return_info["per_net_info"])
+                                         return_info["per_net_info"])
 
         return return_info

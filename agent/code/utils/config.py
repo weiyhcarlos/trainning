@@ -1,13 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from . import Tools
 import yaml
-try:
-    import simplejson as json
-except ImportError:
-    import json
 
+from . import Tools
 
 class Config(Tools):
     """analyze confige file with yaml
@@ -26,9 +22,9 @@ class Config(Tools):
         Return: None
         """
         try:
-            f = open(self.path)
-            data = yaml.load(f)
-            f.close()
+            config_file = open(self.path)
+            data = yaml.load(config_file)
+            config_file.close()
             # ret = json.dumps(data)
             # print ret
         except IOError:

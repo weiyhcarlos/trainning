@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding=utf-8 -*-
 
-from . import Tools
 import socket
 import subprocess
 import string
 
+from . import Tools
 
 class CheckInstance(Tools):
     """check if agent instance existed
@@ -56,5 +56,5 @@ class CheckInstance(Tools):
 
 if __name__ == '__main__':
     ins = CheckInstance(10086)
-    ret = ins.run()
-    print ret
+    ret_info = ins.run()
+    print ret_info

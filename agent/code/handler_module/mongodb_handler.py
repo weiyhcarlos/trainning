@@ -2,7 +2,8 @@
 """mongodb处理模块
 """
 
-import json, os
+import json
+import os
 
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError, ConnectionFailure
@@ -35,7 +36,7 @@ class MongodbHandler(BaseHandler):
         需要子类根据不同情况实现上传
         """
         if (os.path.isfile(self.local_file) and
-            os.stat(self.local_file).st_size != 0):
+                os.stat(self.local_file).st_size != 0):
             lines = [line.rstrip('\n') for line in open('local_data')]
             #清空本地存储文件
             open("local_data", 'w').close()

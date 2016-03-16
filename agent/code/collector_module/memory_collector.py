@@ -26,7 +26,7 @@ class MemoryCollector(BaseCollector):
             "total":virtual_mem_info.total,
             "used":virtual_mem_info.used,
             "abs_used":virtual_mem_info.used-virtual_mem_info.buffers-
-                    virtual_mem_info.cached,
+                       virtual_mem_info.cached,
             "free":virtual_mem_info.free,
             "buffers":virtual_mem_info.buffers,
             "cached":virtual_mem_info.cached,

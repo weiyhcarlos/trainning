@@ -2,7 +2,7 @@
 """信息处理模块
 """
 
-from utils import str_to_class
+from code.utils import str_to_class
 
 class Handler(object):
     """数据处理类
@@ -18,9 +18,9 @@ class Handler(object):
             无
         """
         self.handler_instance = str_to_class(
-                    "handler_module."+method+"_handler",
-                    "".join([m.capitalize() for m in method.split("_")])
-                    +"Handler", config)
+            "handler_module."+method+"_handler",
+            "".join([m.capitalize() for m in method.split("_")])
+            +"Handler", config)
 
     def set_handler(self, method, config):
         """更换子处理模块
@@ -35,11 +35,11 @@ class Handler(object):
         if self.handler_instance != None:
             self.handler_instance.destroy_connection()
         self.handler_instance = str_to_class(
-                    "handler_module."+method+"_handler",
-                    "".join([m.capitalize() for m in method.split("_")])
-                    +"Handler", config)
+            "handler_module."+method+"_handler",
+            "".join([m.capitalize() for m in method.split("_")])
+            +"Handler", config)
         #如果实例化失败,返回错误信息
-        if self.handler_instance == None:
+        if self.handler_instance is None:
             return {
                 "status":1,
                 "ret":"fail to set handler."
@@ -58,7 +58,7 @@ class Handler(object):
             如果全部模块上传成功返回:{"status":0,"ret":""}
             否则返回:{"status":1, "ret":相应错误信息}
         """
-        if self.handler_instance == None:
+        if self.handler_instance is None:
             return {
                 "status":1,
                 "ret":"fail to load handler module."

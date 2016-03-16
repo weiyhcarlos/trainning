@@ -22,6 +22,6 @@ class AverageLoadCollector(BaseCollector):
             "w1_avg":w1_avg,
             "w2_avg":w2_avg,
             "w3_avg":w3_avg
-                }
+        }
 
 

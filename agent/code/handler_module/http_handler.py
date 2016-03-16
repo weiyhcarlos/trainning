@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 """http处理模块
 """
-import requests, json
+import requests
+import json
 
 from . import BaseHandler
 
@@ -31,7 +32,7 @@ class HttpHandler(BaseHandler):
                 self.upload_url,
                 data=json.dumps(post_data),
                 headers={'Content-type': 'application/json',
-                    'Accept': 'text/plain'}
+                         'Accept': 'text/plain'}
                 )
         except requests.ConnectionError:
             return {

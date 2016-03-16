@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import pytest
-import agent
+from code import __main__
 import subprocess
 
 modules_all = "-m cpu disk net average_load"
@@ -25,7 +25,6 @@ def clean(request):
         child.wait()
     request.addfinalizer(func)
 
-    
 def test_options_v(clean):
     child = subprocess.Popen("python agent.py -v", shell=True)
     child.wait()
@@ -50,9 +49,3 @@ def test_options_m_single(clean):
 def test_options_m_update(instance):
     child = subprocess.Popen("python agent.py -m cpu", shell=True)
     child.wait()
-
-
-
-
-
-

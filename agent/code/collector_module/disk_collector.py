@@ -32,26 +32,26 @@ class DiskCollector(BaseCollector):
             usage[part.device] = psutil.disk_usage(part.mountpoint)
 
         return_info = {
-                "t_cap":float(sum(u.total for u in
-                    usage.values())),
-                "t_used":float(sum(u.used for u in
-                    usage.values())),
-                "t_free":float(sum(u.free for u in
-                    usage.values())),
-                "t_read_rate":0.0,
-                "t_write_rate":0.0,
-                "per_disk_info":[]
-                }
+            "t_cap":float(sum(u.total for u in
+                              usage.values())),
+            "t_used":float(sum(u.used for u in
+                               usage.values())),
+            "t_free":float(sum(u.free for u in
+                               usage.values())),
+            "t_read_rate":0.0,
+            "t_write_rate":0.0,
+            "per_disk_info":[]
+        }
         #获得每块磁盘的信息
         for disk_name in usage.keys():
             return_info["per_disk_info"].append({
-                    "disk_name":disk_name,
-                    "cap":float(usage[disk_name].total),
-                    "used":float(usage[disk_name].used),
-                    "free":float(usage[disk_name].free),
-                    "write_rate":0.0,
-                    "read_rate":0.0
-                    })
+                "disk_name":disk_name,
+                "cap":float(usage[disk_name].total),
+                "used":float(usage[disk_name].used),
+                "free":float(usage[disk_name].free),
+                "write_rate":0.0,
+                "read_rate":0.0
+            })
 
         #如果是第一次调用该函数没有缓存上次调用的值,
         #不计算速率部分直接返回磁盘使用信息
@@ -75,18 +75,16 @@ class DiskCollector(BaseCollector):
                         target_disk_info = single_disk
                         break
                 target_disk_info["read_rate"] = float(
-                        current_disk_io[disk_name].read_bytes-
-                        self.last_disk_io[disk_name].read_bytes)/(
-                        interval)
+                    current_disk_io[disk_name].read_bytes-
+                    self.last_disk_io[disk_name].read_bytes)/interval
                 target_disk_info["write_rate"] = float(
-                        current_disk_io[disk_name].write_bytes-
-                        self.last_disk_io[disk_name].write_bytes)/(
-                        interval)
+                    current_disk_io[disk_name].write_bytes-
+                    self.last_disk_io[disk_name].write_bytes)/interval
 
         #根据每个磁盘的速率计算总磁盘速率
         return_info["t_write_rate"] = sum(u["write_rate"] for u in
-                return_info["per_disk_info"])
+                                          return_info["per_disk_info"])
         return_info["t_read_rate"] = sum(u["read_rate"] for u in
-                return_info["per_disk_info"])
+                                          return_info["per_disk_info"])
 
         return return_info
