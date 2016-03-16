@@ -2,15 +2,6 @@
 # -*- encoding=utf8 -*-
 '''
 Filename: test_handler.py
-Author:   Wei Yuhang
-@contact: gzweiyuhang@corp.netease.com
-@version: $Id$
-
-Description:
-
-Changelog:
-
-Created: 2016-02-14 19:45
 '''
 
 import pytest

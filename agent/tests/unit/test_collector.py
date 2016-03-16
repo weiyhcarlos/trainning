@@ -2,15 +2,6 @@
 # -*- encoding=utf8 -*-
 '''
 Filename: test_collector.py
-Author:   Wei Yuhang
-@contact: gzweiyuhang@corp.netease.com
-@version: $Id$
-
-Description:
-
-Changelog:
-
-Created: 2016-02-14 16:25
 '''
 
 import pytest

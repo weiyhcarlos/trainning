@@ -2,52 +2,32 @@
 # -*- encoding=utf8 -*-
 '''
 Filename: test_api_backend.py
-Author:   Wei Yuhang
-@contact: gzweiyuhang@corp.netease.com
-@version: $Id$
-
-Description:
-
-Changelog:
-
-Created: 2016-02-13 23:19
 '''
 
 import pytest
 
 import os
 import json
-import logging
 import datetime
 
-from code import app
+from conftest import client
+from conftest import MACHINE_LIST, MACHINE_URL
 from conf.config import config
 
 config = config[os.getenv('FLASK_CONFIG') or 'default']
-logging.basicConfig(level=logging.INFO)
-
-@pytest.fixture
-def client():
-    """generate flask app client
-    """
-    app.testing = True
-    client = app.test_client()
-    return client
 
 def test_machine_list(client):
     """test for getting machine list
     """
     res_data = json.loads(client.get("monitor/api/machines").data)
-    # logging.info(rv.data)
     for machine in res_data:
-        assert machine["mac"] in ("00:21:5E:98:09:A8", "00:21:5E:98:09:8C")
+        assert machine["mac"] in MACHINE_LIST
     assert len(res_data) == 2
 
 def test_latest_info(client):
     """test for getting latest collected info
     """
-    res_data = json.loads(client.get(
-        "monitor/api/machines/00:21:5E:98:09:A8").data)
+    res_data = json.loads(client.get(MACHINE_URL).data)
     for module in ("cpu", "average_load", "memory", "disk", "net"):
         assert module in res_data
         assert res_data[module]
@@ -64,21 +44,20 @@ def test_search(client):
 
     date_string = date.strftime('%Y-%m-%d %H:%M:%S')
 
+    machine_search = MACHINE_URL + "/search?module="
+
     res_data_20min = json.loads(client.get(
-        "monitor/api/machines/00:21:5E:98:09:A8/search?module="+
-        ",".join(test_module)+"&begin_date="+
+        machine_search+",".join(test_module)+"&begin_date="+
         date_20min.strftime('%Y-%m-%d %H:%M:%S')+
         "&end_date="+date_string).data)
 
     res_data_4hour = json.loads(client.get(
-        "monitor/api/machines/00:21:5E:98:09:A8/search?module="+
-        ",".join(test_module)+"&begin_date="+
+        machine_search+",".join(test_module)+"&begin_date="+
         date_4hour.strftime('%Y-%m-%d %H:%M:%S')+
         "&end_date="+date_string).data)
 
     res_data_1day = json.loads(client.get(
-        "monitor/api/machines/00:21:5E:98:09:A8/search?module="+
-        ",".join(test_module)+"&begin_date="+
+        machine_search+",".join(test_module)+"&begin_date="+
         date_1day.strftime('%Y-%m-%d %H:%M:%S')+
         "&end_date="+date_string).data)
 
