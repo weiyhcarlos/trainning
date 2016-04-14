@@ -8,12 +8,14 @@ import socket
 import logging
 import json
 
+from . import Tools
+
 global GLOBAL_VARS
 GLOBAL_VARS = {}
 BUF_SIZE = 1024
 
 
-class Server(object):
+class Server(Tools):
     """start server to process request
     """
 

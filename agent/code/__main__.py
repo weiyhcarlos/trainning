@@ -7,7 +7,7 @@ import threading
 import signal
 import logging
 
-from code import server
+from code.utils.server import start_server
 from code.utils.args_par import ArgsParse
 from code.utils.check_instance import CheckInstance
 from code.utils.syn_time import syn_time
@@ -107,7 +107,7 @@ def main():
                                     args=(GLOBAL_CONFIG,))
     GLOBAL_CONFIG['threadObj'] = infos_thread
     infos_thread.start()
-    server.start_server(GLOBAL_CONFIG)
+    start_server(GLOBAL_CONFIG)
 
 if __name__ == "__main__":
     main()

@@ -2,7 +2,8 @@
 apt-get install python-pip
 pip install ntplib
 pip install pyyaml
-#pip install pymongo
+pip install pymongo
+pip install psutil
 if [ ! -e /etc/init.d/agent ];then
     cp ./agent /etc/init.d/
 fi
