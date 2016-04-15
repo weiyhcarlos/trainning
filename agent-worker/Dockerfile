@@ -2,7 +2,7 @@ FROM nginx
 
 RUN mkdir -p /var/www
 
-ADD code /var/www/data_interface
+ADD . /var/www/data_interface
 ADD misc/requirements.txt /
 ADD misc/start.sh /
 ADD misc/data_interface.conf /etc/nginx/conf.d/
